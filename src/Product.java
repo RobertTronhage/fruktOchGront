@@ -8,20 +8,28 @@ public class Product {
 
     private boolean unitPriceByWeight;
 
-    public Product(String name, String productGroup, int price, boolean unitPriceByWeight) {
+    public Product(String name, String productGroup, double price, boolean unitPriceByWeight) {
         this.name = name;
         this.productGroup = productGroup;
         this.price = price;
         this.unitPriceByWeight = unitPriceByWeight;
     }
 
-    public Product(String name) {
+    public Product(String name, String productGroup, double price) {
         this.name = name;
+        this.productGroup = productGroup;
+        this.price = price;
     }
-    public Product(String name, int price) {
+
+    public Product(String name, double price) {
         this.name = name;
         this.price = price;
     }
+
+    public Product(String name){
+    this.name = name;
+    }
+
     public String getName() {
         return name;
     }
