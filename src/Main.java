@@ -23,29 +23,41 @@ public class Main {
         allVegetables.add(p1);
 
         System.out.println("Välkommen till Supervåg 3000");
-        int menuOption;
+        int menuOption = 0;
+        boolean isUserInputValid = false;
         do {
             System.out.println("============================\nVälj ett alternativ nedan");
             System.out.println("0 - Avsluta program");
-            System.out.println("1 - Visa alla produkter");
+            System.out.println("1 - Visa produkter");
             System.out.println("2 - Sök efter specifik produkt");
             System.out.println("3 - Lägg till ny produkt");
             System.out.println("4 - Ändra en produkt");
             System.out.println("5 - Ta bort en produkt");
             System.out.println("6 - Pris på produkter");
 
-            menuOption = input.nextInt();
-            input.nextLine();
-
-            switch (menuOption) {
-                //case 1 -> printAllProducts();
+            try {
+                menuOption = input.nextInt();
+                input.nextLine();
+                if (menuOption < 0 || menuOption > 6) {
+                    System.out.println("Felaktig inmatning, vänligen ange nummer 0-6...");
+                    isUserInputValid = true;
+                }else {
+                    isUserInputValid = false;
+                }
+                switch (menuOption) {
+                case 1 -> printProducts();
                 //case 2 -> searchProduct();
                 case 3 -> addProduct();
                 //case 4 -> editProduct();
                 //case 5 -> removeProduct();
                 //case 6 -> priceOfProducts();
+                }
+            }catch (Exception e){
+                input.nextLine();
+                System.out.println("vänligen välj ett alternativ mellan 1-6...");
+                isUserInputValid = true;
             }
-        } while (menuOption != 0);
+        } while (menuOption != 0 || isUserInputValid);
         System.out.println("Tack för att du använder supervåg 3000,\n hejdååå! :)");
     }
 
@@ -194,12 +206,38 @@ public class Main {
     public static void searchProduct() {
 
     }
+*/
+    private static void printProducts() {
 
-    private static void printAllProducts() {
+        int userChoice;
+        do {
+            System.out.println("vilka produkter vill du visa?");
+            System.out.println("1 - " + productGroupArray[0] +
+                    "\n2 - " + productGroupArray[1] +
+                    "\n3 - " + productGroupArray[2] +
+                    "\n4 - " + productGroupArray[3] +
+                    "\n5 - " + "Alla kategorier" +
+                    "\n6 - Åter till huvudmeny");
+            userChoice = input.nextInt();
+            input.nextLine();
+
+            switch (userChoice) {
+                case 1 -> System.out.println("1");
+                case 2 -> System.out.println("2");
+                case 3 -> System.out.println("3");
+                case 4 -> System.out.println("4");
+//ska man loopa igenom alla arraylistor eller ska man skapa en separat "allProducts"?????
+                case 5 -> System.out.println("5");
+                case 6 -> {
+                    return;
+                }
+            }
+
+        } while (userChoice != 6);
 
 
     }
-
+/*
     public static void priceOfProducts() {
         System.out.println(" ");
     }
