@@ -19,12 +19,12 @@ public class Main {
     static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Product p1 = new Product("potatis", "grönsak", 44, true);
+        Product p1 = new Product("potatis", "Rotfrukt", 44, true);
         allVegetables.add(p1);
 
         System.out.println("Välkommen till Supervåg 3000");
         int menuOption = 0;
-        boolean isUserInputValid = false;
+        boolean isUserInputInvalid = false;
         do {
             System.out.println("============================\nVälj ett alternativ nedan");
             System.out.println("0 - Avsluta program");
@@ -40,9 +40,9 @@ public class Main {
                 input.nextLine();
                 if (menuOption < 0 || menuOption > 6) {
                     System.out.println("Felaktig inmatning, vänligen ange nummer 0-6...");
-                    isUserInputValid = true;
+                    isUserInputInvalid = true;
                 }else {
-                    isUserInputValid = false;
+                    isUserInputInvalid = false;
                 }
                 switch (menuOption) {
                 case 1 -> printProducts();
@@ -54,10 +54,10 @@ public class Main {
                 }
             }catch (Exception e){
                 input.nextLine();
-                System.out.println("vänligen välj ett alternativ mellan 1-6...");
-                isUserInputValid = true;
+                System.out.println("vänligen välj ett alternativ mellan 0-6...");
+                isUserInputInvalid = true;
             }
-        } while (menuOption != 0 || isUserInputValid);
+        } while (menuOption != 0 || isUserInputInvalid);
         System.out.println("Tack för att du använder supervåg 3000,\n hejdååå! :)");
     }
 
@@ -170,6 +170,7 @@ public class Main {
             case 5 -> allUnassignedProductGroup.add(newProduct);
         }
     }
+//ska man kunna fritextsöka OCH kategorisöka för att hitta produkten man vill uppdatera???????????
 
     /*public static void editProduct() {
         System.out.println("Vad vill du ändra?");
@@ -200,13 +201,35 @@ public class Main {
     }
 
     public static void removeProduct() {
-
-    }
-
-    public static void searchProduct() {
-
+//ska man kunna fritextsöka OCH kategorisöka????? samma metod som editproduct och searchprodukt,
+//Rimligast att göra en sökmetod i searchProduct och sen bara använda samma metod i uppdatera och ta bort?
+//Ska resultaten sorteras?
     }
 */
+    public static void searchProduct() {
+//kategorisök och fritextsök!
+        int userChoice = 0;
+        boolean isUserInputInvalid = false;
+        do {
+            System.out.println("Vill du söka efter kategori eller fritextsöka?" +
+                    "\n1 - Fritext\n2 - söka efter kategori");
+            try{
+                userChoice = input.nextInt();
+                input.nextLine();
+
+                switch (userChoice){
+                    case 1 -> {} //fritextsök
+                    case 2 -> {} //söka sig fram via kategori..
+                }
+
+            }catch(Exception e){
+                input.nextLine(); //consumes rest of line...
+                System.out.println("Här gick det snett, vänligen välj alternativ 1 eller 2...");
+                isUserInputInvalid = true;
+            }
+        }while(userChoice != 0 || isUserInputInvalid);
+    }
+
     private static void printProducts() {
 
         int userChoice;
@@ -216,19 +239,49 @@ public class Main {
                     "\n2 - " + productGroupArray[1] +
                     "\n3 - " + productGroupArray[2] +
                     "\n4 - " + productGroupArray[3] +
-                    "\n5 - " + "Alla kategorier" +
-                    "\n6 - Åter till huvudmeny");
+                    "\n5 - " + "Produkter utan kategori" +
+                    "\n6 - " + "Alla kategorier" +
+                    "\n7 - Åter till huvudmeny");
             userChoice = input.nextInt();
             input.nextLine();
 
             switch (userChoice) {
-                case 1 -> System.out.println("1");
-                case 2 -> System.out.println("2");
-                case 3 -> System.out.println("3");
-                case 4 -> System.out.println("4");
+                case 1 -> {
+                    for (Product allFruit : allFruits) {
+                        System.out.print(allFruit.toString());
+                    }
+                    return;
+                }
+                case 2 -> {
+                    for (Product allVegetables: allVegetables){
+                        System.out.println(allVegetables.toString());
+                    }
+                    return;
+                }
+                case 3 -> {
+                    for (Product allRootVegetables: allRootVegetables){
+                        System.out.println(allRootVegetables.toString());
+                    }
+                    return;
+                }
+                case 4 -> {
+                    for (Product allMushrooms: allMushrooms){
+                        System.out.println(allMushrooms.toString());
+                    }
+                    return;
+                }
 //ska man loopa igenom alla arraylistor eller ska man skapa en separat "allProducts"?????
-                case 5 -> System.out.println("5");
+                case 5 -> {
+                    for (Product allUnassigned : allUnassignedProductGroup) {
+                        System.out.print(allUnassignedProductGroup.toString());
+                    }
+                    return;
+                }
                 case 6 -> {
+                    System.out.println("ALLA KATEGORIER!!!!");
+                    return;
+                }
+                case 7 -> {
                     return;
                 }
             }

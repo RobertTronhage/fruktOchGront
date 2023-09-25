@@ -52,9 +52,10 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "name='" + name + '\'' +
-                ", productGroup='" + productGroup + '\'' +
-                ", price=" + price +
-                '}';
+                "Namn='" + name + '\'' +
+                ", Kategori='" + productGroup + '\'' +
+                ", Pris=" + price + "SEK" +
+                ", Säljs=" + unitPriceByWeight +
+                "}\n";
     }
 }
