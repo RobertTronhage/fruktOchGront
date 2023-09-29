@@ -13,8 +13,10 @@ public class Main {
     public static ArrayList<Product> allMushrooms = new ArrayList<>();
     public static ArrayList<Product> allUnassignedProductGroup = new ArrayList<>();
     public static String[] productGroupArray = {"Frukt", "Grönsaker", "Rotfrukt", "Svamp", "Ingen kategori"};
-    // ska man ha en array för "huvudgrupper" Frukt, stenfrukt, rotfrukt, grönsaker.
-    // och sedan arrayList under det för att ha typ, äpple, päron osv???
+
+/* ska man ha en array för "huvudgrupper" Frukt, grönsaker, rotfrukt, svamp, ingen kategori.
+   och sedan arrayList under det för att ha typ, äpple, päron osv???
+*/
 
     static Scanner input = new Scanner(System.in);
 
@@ -23,22 +25,23 @@ public class Main {
         allVegetables.add(p1);
 
         System.out.println("Välkommen till Supervåg 3000");
-        int menuOption = 0;
+        int menuOption = 7;
         boolean isUserInputInvalid = false;
         do {
             System.out.println("============================\nVälj ett alternativ nedan");
-            System.out.println("0 - Avsluta program");
+
             System.out.println("1 - Visa produkter");
             System.out.println("2 - Sök efter specifik produkt");
             System.out.println("3 - Lägg till ny produkt");
             System.out.println("4 - Ändra en produkt");
             System.out.println("5 - Ta bort en produkt");
             System.out.println("6 - Pris på produkter");
+            System.out.println("7 - Avsluta program");
 
             try {
                 menuOption = input.nextInt();
                 input.nextLine();
-                if (menuOption < 0 || menuOption > 6) {
+                if (menuOption < 1 || menuOption > 7) {
                     System.out.println("Felaktig inmatning, vänligen ange nummer 0-6...");
                     isUserInputInvalid = true;
                 }else {
@@ -57,21 +60,9 @@ public class Main {
                 System.out.println("vänligen välj ett alternativ mellan 0-6...");
                 isUserInputInvalid = true;
             }
-        } while (menuOption != 0 || isUserInputInvalid);
+        } while (menuOption != 7 || isUserInputInvalid);
         System.out.println("Tack för att du använder supervåg 3000,\n hejdååå! :)");
     }
-
-    /*public static int menuOption() {
-        while (true) {
-            try {
-                int n = input.nextInt();
-                return n;
-            } catch (InputMismatchException e) {
-                input.nextLine();
-                System.out.println("Ojdå, här gick nåt snett, vänligen välj ett alternativ 1-5");
-            }
-        }
-    }*/
 
     private static void addProduct() {
         int categoryChoice = 0;
@@ -170,7 +161,6 @@ public class Main {
             case 5 -> allUnassignedProductGroup.add(newProduct);
         }
     }
-//ska man kunna fritextsöka OCH kategorisöka för att hitta produkten man vill uppdatera???????????
 
     /*public static void editProduct() {
         System.out.println("Vad vill du ändra?");
@@ -196,13 +186,11 @@ public class Main {
         }
         System.out.println("Vilken produkt vill du ändra?");
         String userInput = input.nextLine();
-
-
     }
 
     public static void removeProduct() {
 //ska man kunna fritextsöka OCH kategorisöka????? samma metod som editproduct och searchprodukt,
-//Rimligast att göra en sökmetod i searchProduct och sen bara använda samma metod i uppdatera och ta bort?
+//Rimligast att göra en sökmetod i searchProduct och sen bara använda samma metod i uppdatera och ta bort-metoden?
 //Ska resultaten sorteras?
     }
 */
@@ -218,8 +206,8 @@ public class Main {
                 input.nextLine();
 
                 switch (userChoice){
-                    case 1 -> {} //fritextsök
-                    case 2 -> {} //söka sig fram via kategori..
+                    case 1 -> System.out.println("text"); //fritextsök
+                    case 2 -> System.out.println("kategori"); //söka sig fram via kategori..
                 }
 
             }catch(Exception e){
@@ -231,7 +219,7 @@ public class Main {
     }
 
     private static void printProducts() {
-
+//printf istället?
         int userChoice;
         do {
             System.out.println("vilka produkter vill du visa?");
@@ -270,7 +258,7 @@ public class Main {
                     }
                     return;
                 }
-//ska man loopa igenom alla arraylistor eller ska man skapa en separat "allProducts"?????
+//ska man loopa igenom alla arraylistor eller ska man skapa en separat "allProducts"????? hur sorterar man den om man vill det isf???
                 case 5 -> {
                     for (Product allUnassigned : allUnassignedProductGroup) {
                         System.out.print(allUnassignedProductGroup.toString());
@@ -290,10 +278,11 @@ public class Main {
 
 
     }
-/*
+
     public static void priceOfProducts() {
-        System.out.println(" ");
+        //låna metoden av searchProducts!
+        System.out.println("piset är:");
     }
-*/
+
 
 }
