@@ -6,30 +6,34 @@ public class Product {
     //Price in SEK
     private double price;
     private boolean unitPriceByWeight;
-    private int productId;
+    private final int productId;
 
-    public Product(String name, String productGroup, double price, boolean unitPriceByWeight,int productId) {
+    public Product(String name, String productGroup, double price, boolean unitPriceByWeight) {
         this.name = name;
         this.productGroup = productGroup;
         this.price = price;
         this.unitPriceByWeight = unitPriceByWeight;
-        this.productId = productId;
+        this.productId = Main.productIdTracker++;
     }
 
     public Product(String name, String productGroup, double price) {
         this.name = name;
         this.productGroup = productGroup;
         this.price = price;
+        this.productId = Main.productIdTracker++;
     }
 
     public Product(String name, double price) {
         this.name = name;
         this.price = price;
+        this.productId = Main.productIdTracker++;
     }
 
     public Product(String name){
     this.name = name;
+    this.productId = Main.productIdTracker++;
     }
+
 
     public String getName() {
         return name;
@@ -40,6 +44,11 @@ public class Product {
     public double getPrice() {
         return price;
     }
+
+    public int getProductId() {
+        return productId;
+    }
+
     public boolean isUnitPriceByWeight() {
         return unitPriceByWeight;
     }

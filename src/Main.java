@@ -14,15 +14,15 @@ public class Main {
     static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Product p1 = new Product("aaaaaaaaaa", "Rotfrukt", 44, true,productIdTracker++);
-        Product p2 = new Product("bbbbbbbb", "Frukt", 44, false,productIdTracker++);
-        Product p3 = new Product("cccccccc", "Rotfrukt", 44, true,productIdTracker++);
-        Product p4 = new Product("ddddddddd", "Svamp", 44, true,productIdTracker++);
-        Product p5 = new Product("eeeeeeee", "Rotfrukt", 44, true,productIdTracker++);
-        Product p6 = new Product("ffffff", "Ingen kategori", 44, true,productIdTracker++);
-        Product p7 = new Product("gggggggg", "Ingen kategori", 44, true,productIdTracker++);
-        Product p8 = new Product("hhhhhhhhhh", "Grönsaker", 44, true,productIdTracker++);
-        Product p9 = new Product("iiiiiiii", "Grönsaker", 44, true,productIdTracker++);
+        Product p1 = new Product("aaaaaaaaaa", "Rotfrukt", 44, true);
+        Product p2 = new Product("bbbbbbbb", "Frukt", 44, false);
+        Product p3 = new Product("cccccccc", "Rotfrukt", 44, true);
+        Product p4 = new Product("ddddddddd", "Svamp", 44, true);
+        Product p5 = new Product("eeeeeeee", "Rotfrukt", 44, true);
+        Product p6 = new Product("ffffff", "Ingen kategori", 44, true);
+        Product p7 = new Product("gggggggg", "Ingen kategori", 44, true);
+        Product p8 = new Product("hhhhhhhhhh", "Grönsaker", 44, true);
+        Product p9 = new Product("iiiiiiii", "Grönsaker", 44, true);
 
         allVegetables.add(p1);
         allFruits.add(p2);
@@ -64,7 +64,7 @@ public class Main {
                 switch (menuOption) {
                 case 1 -> searchMenu();
                 case 2 -> addProduct();
-                //case 3 -> editProduct();
+                case 3 -> editProduct();
                 //case 4 -> removeProduct();
                 //case 5 -> priceOfProducts();
 
@@ -167,7 +167,7 @@ public class Main {
             }
 
         } while (isUserInputInvalid);
-        Product newProduct = new Product(productName, productGroup, productPrice, unitPriceByWeight,productIdTracker++);
+        Product newProduct = new Product(productName, productGroup, productPrice, unitPriceByWeight);
         switch(categoryChoice){
             case 1 -> allFruits.add(newProduct);
             case 2 -> allVegetables.add(newProduct);
@@ -177,31 +177,38 @@ public class Main {
         }
     }
 
-  /*  public static void editProduct() {
-        System.out.println("Vad vill du ändra?");
-        System.out.println("1 - Produktnamn\n 2 - Pris \n 3- produktgrupp");
-        int userChoice = input.nextInt();
-        input.nextLine();
+    public static void editProduct() {
+        int userInput;
+        Product foundProduct = null;
 
-        if (userChoice == 1) {
-            System.out.println("Vad heter produkten du vill ändra?");
-            String productChoice = input.nextLine();
-
-            for (int i = 0; i < allProducts.size(); i++) {
-                Product foundProduct = allProducts.get(i);
-                if (foundProduct.getName().equals(productChoice)) {
-                    System.out.println("Vad är det nya namnet på produkten?");
-                    String newName = input.nextLine();
-                    foundProduct.setName(newName);
-
-                } else {
-                    System.out.println("Det produktnamnet existerar inte...");
-                }
+        for (ArrayList<Product> productGroup : allProducts) {
+            for (Product product: productGroup) {
+                System.out.println(product.toString());
             }
         }
-        System.out.println("Vilken produkt vill du ändra?");
-        String userInput = input.nextLine();
-    }*/
+        System.out.println("ange produktID på den produkten du vill ändra.");
+        userInput = input.nextInt();
+        input.nextLine();//consumes rest of line
+
+        for (ArrayList<Product> productGroup: allProducts){
+            for (Product product : productGroup){
+                if (product.getProductId() == userInput){
+                    foundProduct = product;
+                    break;
+                }
+            }
+            if (foundProduct != null){
+                break;
+            }
+        }
+        System.out.println("Vad vill du ändra?\n1 - Produktnamn\n2 - Pris \n3- produktgrupp");
+
+        switch (userInput){
+            case 1 -> {
+
+            }
+        }
+    }
 
     public static void removeProduct() {
         int userInput = 3;
@@ -301,10 +308,9 @@ public class Main {
                     }
                     return;
                 }
-//ska man loopa igenom alla arraylistor eller ska man skapa en separat "allProducts"????? hur sorterar man den om man vill det isf???
                 case 5 -> {
                     for (Product allUnassigned : allUnassignedProductGroup) {
-                        System.out.print(allUnassignedProductGroup.toString());
+                        System.out.print(allUnassigned.toString());
                     }
                     return;
                 }
