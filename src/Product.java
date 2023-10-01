@@ -5,14 +5,15 @@ public class Product {
     private String productGroup;
     //Price in SEK
     private double price;
-
     private boolean unitPriceByWeight;
+    private int productId;
 
-    public Product(String name, String productGroup, double price, boolean unitPriceByWeight) {
+    public Product(String name, String productGroup, double price, boolean unitPriceByWeight,int productId) {
         this.name = name;
         this.productGroup = productGroup;
         this.price = price;
         this.unitPriceByWeight = unitPriceByWeight;
+        this.productId = productId;
     }
 
     public Product(String name, String productGroup, double price) {
@@ -56,11 +57,11 @@ public class Product {
     @Override
     public String toString() {
         if (unitPriceByWeight){
-            return "{" +
-                    "produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", price) + " SEK" + " /kilo" + "}\n";
+            return "{" + "ProduktId: " + productId +
+                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", price) + " SEK" + " /kilo" + "}\n";
         }else{
-            return "{" +
-                    "produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", price) + " SEK" + " /styck" + "}\n";
+            return "{" + "ProduktId: " + productId +
+                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", price) + " SEK" + " /styck" + "}\n";
         }
     }
 

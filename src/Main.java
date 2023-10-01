@@ -10,24 +10,19 @@ public class Main {
     public static ArrayList<Product> allUnassignedProductGroup = new ArrayList<>();
     public static ArrayList<ArrayList<Product>> allProducts = new ArrayList<>();
     public static String[] productGroupArray = {"Frukt", "Grönsaker", "Rotfrukt", "Svamp", "Ingen kategori"};
-
-/* ska man ha en array för "huvudgrupper" Frukt, grönsaker, rotfrukt, svamp, ingen kategori.
-   och sedan arrayList under det för att ha typ, äpple, päron osv???
-*/
-
+    public static int productIdTracker = 1;
     static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Product p1 = new Product("aaaaaaaaaa", "Rotfrukt", 44, true);
-        Product p2 = new Product("bbbbbbbb", "Frukt", 44, false);
-        Product p3 = new Product("cccccccc", "Rotfrukt", 44, true);
-        Product p4 = new Product("ddddddddd", "Svamp", 44, true);
-        Product p5 = new Product("eeeeeeee", "Rotfrukt", 44, true);
-        Product p6 = new Product("ffffff", "Ingen kategori", 44, true);
-        Product p7 = new Product("gggggggg", "Ingen kategori", 44, true);
-        Product p8 = new Product("hhhhhhhhhh", "Grönsaker", 44, true);
-        Product p9 = new Product("iiiiiiii", "Grönsaker", 44, true);
-
+        Product p1 = new Product("aaaaaaaaaa", "Rotfrukt", 44, true,productIdTracker++);
+        Product p2 = new Product("bbbbbbbb", "Frukt", 44, false,productIdTracker++);
+        Product p3 = new Product("cccccccc", "Rotfrukt", 44, true,productIdTracker++);
+        Product p4 = new Product("ddddddddd", "Svamp", 44, true,productIdTracker++);
+        Product p5 = new Product("eeeeeeee", "Rotfrukt", 44, true,productIdTracker++);
+        Product p6 = new Product("ffffff", "Ingen kategori", 44, true,productIdTracker++);
+        Product p7 = new Product("gggggggg", "Ingen kategori", 44, true,productIdTracker++);
+        Product p8 = new Product("hhhhhhhhhh", "Grönsaker", 44, true,productIdTracker++);
+        Product p9 = new Product("iiiiiiii", "Grönsaker", 44, true,productIdTracker++);
 
         allVegetables.add(p1);
         allFruits.add(p2);
@@ -39,14 +34,11 @@ public class Main {
         allVegetables.add(p8);
         allVegetables.add(p9);
 
-
         allProducts.addAll(Collections.singleton(allFruits));
         allProducts.addAll(Collections.singleton(allVegetables));
         allProducts.addAll(Collections.singleton(allRootVegetables));
         allProducts.addAll(Collections.singleton(allMushrooms));
         allProducts.addAll(Collections.singleton(allUnassignedProductGroup));
-
-
 
         System.out.println("Välkommen till Supervåg 3000");
         int menuOption = 6;
@@ -175,7 +167,7 @@ public class Main {
             }
 
         } while (isUserInputInvalid);
-        Product newProduct = new Product(productName, productGroup, productPrice, unitPriceByWeight);
+        Product newProduct = new Product(productName, productGroup, productPrice, unitPriceByWeight,productIdTracker++);
         switch(categoryChoice){
             case 1 -> allFruits.add(newProduct);
             case 2 -> allVegetables.add(newProduct);
@@ -185,7 +177,7 @@ public class Main {
         }
     }
 
-    /*public static void editProduct() {
+  /*  public static void editProduct() {
         System.out.println("Vad vill du ändra?");
         System.out.println("1 - Produktnamn\n 2 - Pris \n 3- produktgrupp");
         int userChoice = input.nextInt();
@@ -215,7 +207,6 @@ public class Main {
         int userInput = 3;
         do {
             System.out.println("Fyll i vad produkten du vill ta bort heter:");
-
         }while(userInput != 3);
     }
 
