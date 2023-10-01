@@ -39,6 +39,10 @@ public class Product {
     public double getPrice() {
         return price;
     }
+    public boolean isUnitPriceByWeight() {
+        return unitPriceByWeight;
+    }
+
     public void setName(String newName) {
         this.name = newName;
     }
@@ -51,11 +55,13 @@ public class Product {
 
     @Override
     public String toString() {
-        return "{" +
-                "produktnamn='" + name + '\'' +
-                ", Kategori='" + productGroup + '\'' +
-                ", Pris=" + price + "SEK" +
-                ", Säljs=" + unitPriceByWeight +
-                "}\n";
+        if (unitPriceByWeight){
+            return "{" +
+                    "produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", price) + " SEK" + " /kilo" + "}\n";
+        }else{
+            return "{" +
+                    "produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", price) + " SEK" + " /styck" + "}\n";
+        }
     }
+
 }
