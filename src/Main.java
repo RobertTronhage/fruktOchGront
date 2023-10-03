@@ -1,5 +1,9 @@
 //Robert Tronhage, robert.tronhage@iths.se
 
+//todo: göra en searchById -metod som man nyttjar i
+// edit,delete, price metoden samt lägga till den som alternativ i search!..
+//Lägg till felhantering för alla metoder
+
 import java.util.*;
 
 public class Main {
@@ -56,7 +60,7 @@ public class Main {
                 menuOption = input.nextInt();
                 input.nextLine();
                 if (menuOption < 1 || menuOption > 7) {
-                    System.out.println("Felaktig inmatning, vänligen ange nummer 0-6...");
+                    System.out.println("Felaktig inmatning, vänligen ange nummer 1-6...");
                     isUserInputInvalid = true;
                 }else {
                     isUserInputInvalid = false;
@@ -65,13 +69,13 @@ public class Main {
                 case 1 -> searchMenu();
                 case 2 -> addProduct();
                 case 3 -> editProduct();
-                //case 4 -> removeProduct();
-                //case 5 -> priceOfProducts();
+                case 4 -> removeProduct();
+                case 5 -> priceOfProducts();
 
                 }
             }catch (Exception e){
                 input.nextLine();
-                System.out.println("vänligen välj ett alternativ mellan 0-6...");
+                System.out.println("vänligen välj ett alternativ mellan 1-6...");
                 isUserInputInvalid = true;
             }
         } while (menuOption != 6 || isUserInputInvalid);
@@ -130,7 +134,7 @@ public class Main {
             try {
                 productPrice = input.nextDouble();
 
-                if (productPrice < 0 || productPrice > 2000) {
+                if (productPrice < 0 || productPrice > 3000) { //om det är nån hutlös siffra, "ska det verkligen vara så?" och sen låta användaren fylla idet?
                     System.out.println("felaktig inmatning, vänligen ange pris i kronor...");
                     isUserInputInvalid = true;
                 } else {
@@ -186,6 +190,7 @@ public class Main {
                 System.out.println(product.toString());
             }
         }
+
         System.out.println("ange produktID på den produkten du vill ändra.");
         userInput = input.nextInt();
         input.nextLine();//consumes rest of line
@@ -201,20 +206,66 @@ public class Main {
                 break;
             }
         }
-        System.out.println("Vad vill du ändra?\n1 - Produktnamn\n2 - Pris \n3- produktgrupp");
+        System.out.println("Vad vill du ändra?\n1 - Produktnamn\n2 - Pris \n3- produktgrupp\n4 - ");
 
         switch (userInput){
             case 1 -> {
-
+                System.out.println("namn");
             }
+            case 2 -> {
+                System.out.println("pris"); //ska man kunna lägga till kampanjpris? (ord pris, kampanjpris).
+            }
+            case 3 -> {
+                System.out.println("grupp");
+            }
+            case 4 ->{
+                System.out.println("säljs som vikt eller styck");
+            }
+
         }
     }
 
     public static void removeProduct() {
-        int userInput = 3;
+        int userInput = 0;
+
         do {
-            System.out.println("Fyll i vad produkten du vill ta bort heter:");
-        }while(userInput != 3);
+            System.out.println("Ange 0 för att återgå till huvudmenu\n" +
+                    "Ange produktID på den produkten du vill ta bort:");
+            userInput = input.nextInt();
+            input.nextLine();
+            if (userInput==0){
+                break;
+            }else {
+                for (ArrayList<Product> productGroup : allProducts) {
+                    for (int i = 0; i < productGroup.size(); i++) {
+                        Product product = productGroup.get(i);
+                        if (product.getProductId() == userInput) {
+
+                            System.out.println("Du har valt" + product.getName() +
+                                    "\n är du säker på att du vill ta bort Produkten?\n" +
+                                    "1 - Ta bort vald produkt\n2 - Avbryt");
+                            int confirmDeletion = input.nextInt();
+                            input.nextLine();
+
+                            if (confirmDeletion == 1){
+                                System.out.println(product.getName() + " raderas!");
+                                productGroup.remove(i);
+
+                            }else {
+                                System.out.println("Avbryter!" + product.getName() + " raderas EJ!");
+                                break;
+                            }
+
+                            break;
+                        } else {
+                            System.out.println("kan inte hitta produktID");
+                        }
+                    }
+                    break;
+                }
+            }
+
+        }while(userInput != 0);
     }
 
     public static void searchMenu() {
@@ -261,16 +312,14 @@ public class Main {
             }
         }
         if(searchResult.isEmpty()) {
-            System.out.println("Det produktnamnet finns inte...\n" +
-                    "Försök igen eller testa söka via kategori\n" +
-                    "1 - sök igen\n2 - sök efter kategori\n3 - åter till huvudmeny");
+            System.out.println("Det produktnamnet finns inte...\n");
+
         }else {
             for (Product p : searchResult) {
                 System.out.println(p);
             }
         }
     }
-
     private static void printProducts() {
         int userChoice;
         do {
@@ -281,7 +330,7 @@ public class Main {
                     "\n4 - " + productGroupArray[3] +
                     "\n5 - " + productGroupArray[4] +
                     "\n6 - " + "Alla kategorier" +
-                    "\n7 - Åter till huvudmeny");
+                    "\n7 - Åter till sökmenyn");
             userChoice = input.nextInt();
             input.nextLine();
 
@@ -327,12 +376,11 @@ public class Main {
                 }
             }
 
-        } while (userChoice != 6);
+        } while (userChoice != 7);
     }
 
     public static void priceOfProducts() {
-        //låna metoden av searchProducts!
-        System.out.println("piset är:");
+        printProducts();
     }
 
 

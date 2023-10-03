@@ -34,7 +34,6 @@ public class Product {
     this.productId = Main.productIdTracker++;
     }
 
-
     public String getName() {
         return name;
     }
