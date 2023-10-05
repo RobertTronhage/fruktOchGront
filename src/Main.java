@@ -29,7 +29,7 @@ public class Main {
         Product p8 = new Product("hhhhhhhhhh", "Grönsaker", 44, true);
         Product p9 = new Product("iiiiiiii", "Grönsaker", 44, true);
 
-        allVegetables.add(p1);
+        allRootVegetables.add(p1);
         allFruits.add(p2);
         allRootVegetables.add(p3);
         allMushrooms.add(p4);
@@ -50,13 +50,13 @@ public class Main {
         boolean isUserInputInvalid = false;
         do {
             System.out.println("============================\n"
-            + "Välj ett alternativ nedan\n"
-            + "1 - Sök efter specifik produkt\n"
-            + "2 - Lägg till ny produkt\n"
-            + "3 - Ändra en produkt\n"
-            + "4 - Ta bort en produkt\n"
-            + "5 - Pris på produkter\n"
-            + "6 - Avsluta program");
+                    + "Välj ett alternativ nedan\n"
+                    + "1 - Sök efter specifik produkt\n"
+                    + "2 - Lägg till ny produkt\n"
+                    + "3 - Ändra en produkt\n"
+                    + "4 - Ta bort en produkt\n"
+                    + "5 - Pris på produkter\n"
+                    + "6 - Avsluta program");
 
             try {
                 menuOption = input.nextInt();
@@ -64,18 +64,18 @@ public class Main {
                 if (menuOption < 1 || menuOption > 7) {
                     System.out.println("Felaktig inmatning, vänligen ange nummer 1-6...");
                     isUserInputInvalid = true;
-                }else {
+                } else {
                     isUserInputInvalid = false;
                 }
                 switch (menuOption) {
-                case 1 -> searchMenu();
-                case 2 -> addProduct();
-                case 3 -> editProduct();
-                case 4 -> removeProduct();
-                case 5 -> priceOfProducts();
+                    case 1 -> searchMenu();
+                    case 2 -> addProduct();
+                    case 3 -> editProduct();
+                    case 4 -> removeProduct();
+                    case 5 -> priceOfProducts();
 
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 input.nextLine();
                 System.out.println("vänligen välj ett alternativ mellan 1-6...");
                 isUserInputInvalid = true;
@@ -92,35 +92,8 @@ public class Main {
         String productGroup = "";
 
         boolean isUserInputInvalid = false;
-        do {
-            System.out.println("Ange vilken kategori produkten tillhör");
-            System.out.println("1 - " + productGroupArray[0] +
-                    "\n2 - " + productGroupArray[1] +
-                    "\n3 - " + productGroupArray[2] +
-                    "\n4 - " + productGroupArray[3] +
-                    "\n5 - " + productGroupArray[4]);
-            try {
-                categoryChoice = input.nextInt();
-                input.nextLine();
-                if (categoryChoice < 1 || categoryChoice > 5) {
-                    System.out.println("felaktig inmatning, vänligen ange nummer 1-5...");
-                    isUserInputInvalid = true;
-                } else {
-                    isUserInputInvalid = false;
-                    switch (categoryChoice) {
-                        case 1 -> productGroup = productGroupArray[0];
-                        case 2 -> productGroup = productGroupArray[1];
-                        case 3 -> productGroup = productGroupArray[2];
-                        case 4 -> productGroup = productGroupArray[3];
-                        case 5 -> productGroup = productGroupArray[4];
-                    }
-                }
-            } catch (Exception e) {
-                input.nextLine();
-                System.out.println("felaktig inmatning, vänligen ange nummer 1-5...");
-                isUserInputInvalid = true;
-            }
-        } while (isUserInputInvalid);
+
+        productGroup = setProductGroup();
 
         do {
             System.out.println("Ange namn på produkten: ");
@@ -174,54 +147,107 @@ public class Main {
 
         } while (isUserInputInvalid);
         Product newProduct = new Product(productName, productGroup, productPrice, unitPriceByWeight);
-        switch(categoryChoice){
-            case 1 -> allFruits.add(newProduct);
-            case 2 -> allVegetables.add(newProduct);
-            case 3 -> allRootVegetables.add(newProduct);
-            case 4 -> allMushrooms.add(newProduct);
-            case 5 -> allUnassignedProductGroup.add(newProduct);
+        //switch behövde konstanta cases, kan inte lägga productgrouparray[], därav if satser...
+        if (productGroup.equals(productGroupArray[0])) {
+            allFruits.add(newProduct);
+        } else if (productGroup.equals(productGroupArray[1])) {
+            allVegetables.add(newProduct);
+        } else if (productGroup.equals(productGroupArray[2])) {
+            allRootVegetables.add(newProduct);
+        } else if (productGroup.equals(productGroupArray[3])) {
+            allMushrooms.add(newProduct);
+        } else if (productGroup.equals(productGroupArray[4])) {
+            allUnassignedProductGroup.add(newProduct);
         }
     }
 
-    public static void editProduct() {
-        int userInput;
-        Product foundProduct = null;
+    private static String setProductGroup() {
+        int categoryChoice = 0;
+        String productGroup = "";
+        boolean isUserInputInvalid;
 
-        for (ArrayList<Product> productGroup : allProducts) {
-            for (Product product: productGroup) {
-                System.out.println(product.toString());
-            }
-        }
-
-        System.out.println("ange produktID på den produkten du vill ändra.");
-        userInput = input.nextInt();
-        input.nextLine();//consumes rest of line
-
-        for (ArrayList<Product> productGroup: allProducts){
-            for (Product product : productGroup){
-                if (product.getProductId() == userInput){
-                    foundProduct = product;
-                    break;
+        do {
+            System.out.println("Ange vilken kategori produkten tillhör");
+            System.out.println("1 - " + productGroupArray[0] +
+                    "\n2 - " + productGroupArray[1] +
+                    "\n3 - " + productGroupArray[2] +
+                    "\n4 - " + productGroupArray[3] +
+                    "\n5 - " + productGroupArray[4]);
+            try {
+                categoryChoice = input.nextInt();
+                input.nextLine();
+                if (categoryChoice < 1 || categoryChoice > 5) {
+                    System.out.println("felaktig inmatning, vänligen ange nummer 1-5...");
+                    isUserInputInvalid = true;
+                } else {
+                    isUserInputInvalid = false;
+                    switch (categoryChoice) {
+                        case 1 -> productGroup = productGroupArray[0];
+                        case 2 -> productGroup = productGroupArray[1];
+                        case 3 -> productGroup = productGroupArray[2];
+                        case 4 -> productGroup = productGroupArray[3];
+                        case 5 -> productGroup = productGroupArray[4];
+                    }
                 }
+            } catch (Exception e) {
+                input.nextLine();
+                System.out.println("felaktig inmatning, vänligen ange nummer 1-5...");
+                isUserInputInvalid = true;
             }
-            if (foundProduct != null){
-                break;
-            }
-        }
-        System.out.println("Vad vill du ändra?\n1 - Produktnamn\n2 - Pris \n3- produktgrupp\n4 - ");
+        } while (isUserInputInvalid);
+        return productGroup;
+    }
 
-        switch (userInput){
+    public static void editProduct() {
+
+        Product foundProduct = searchById();
+
+
+        System.out.println("Vad vill du ändra?\n1 - Produktnamn\n2 - Pris \n3- produktgrupp\n" +
+                "4 - Prissättningsmodell (vikt/styck)\n" +
+                "5 - Åter till huvudmenyn");
+
+        int userInput = input.nextInt();
+        input.nextLine();
+
+        switch (userInput) {
             case 1 -> {
-                System.out.println("namn");
+                System.out.println("Ange nytt namn på produkten: ");
+                String newName = input.nextLine();
+                foundProduct.setName(newName);
             }
             case 2 -> {
-                System.out.println("pris"); //ska man kunna lägga till kampanjpris? (ord pris, kampanjpris).
+                System.out.println("Ange nytt pris på produkten: ");
+                double newPrice = input.nextDouble();
+                foundProduct.setPrice(newPrice);
             }
             case 3 -> {
-                System.out.println("grupp");
+                foundProduct.setProductGroup(setProductGroup());
+                for (ArrayList<Product> productGroup : allProducts) {
+                    for (int i = 0; i < productGroup.size(); i++) {
+                        if (productGroup.contains(foundProduct)){
+                            productGroup.remove(foundProduct);
+                            //switch behövde konstanta cases, kan inte lägga productgrouparray[], därav if satser...
+                            String tempFoundProduct = foundProduct.getProductGroup();
+                            if (tempFoundProduct.equals(productGroupArray[0])) {
+                                allFruits.add(foundProduct);
+                            } else if (tempFoundProduct.equals(productGroupArray[1])) {
+                                allVegetables.add(foundProduct);
+                            } else if (tempFoundProduct.equals(productGroupArray[2])) {
+                                allRootVegetables.add(foundProduct);
+                            } else if (tempFoundProduct.equals(productGroupArray[3])) {
+                                allMushrooms.add(foundProduct);
+                            } else if (tempFoundProduct.equals(productGroupArray[4])) {
+                                allUnassignedProductGroup.add(foundProduct);
+                            }
+                        }
+                    }
+                }
             }
-            case 4 ->{
+            case 4 -> {
                 System.out.println("säljs som vikt eller styck");
+            }
+            case 5 -> {
             }
 
         }
@@ -235,25 +261,25 @@ public class Main {
                     "Ange produktID på den produkten du vill ta bort:");
             userInput = input.nextInt();
             input.nextLine();
-            if (userInput==0){
-                break;
-            }else {
+            if (userInput == 0) {
+                return;
+            } else {
                 for (ArrayList<Product> productGroup : allProducts) {
                     for (int i = 0; i < productGroup.size(); i++) {
                         Product product = productGroup.get(i);
                         if (product.getProductId() == userInput) {
 
-                            System.out.println("Du har valt" + product.getName() +
+                            System.out.println("Du har valt " + product.getName() +
                                     "\n är du säker på att du vill ta bort Produkten?\n" +
                                     "1 - Ta bort vald produkt\n2 - Avbryt");
                             int confirmDeletion = input.nextInt();
                             input.nextLine();
 
-                            if (confirmDeletion == 1){
+                            if (confirmDeletion == 1) {
                                 System.out.println(product.getName() + " raderas!");
                                 productGroup.remove(i);
 
-                            }else {
+                            } else {
                                 System.out.println("Avbryter!" + product.getName() + " raderas EJ!");
                                 break;
                             }
@@ -266,7 +292,7 @@ public class Main {
                 }
             }
 
-        }while(userInput != 0);
+        } while (userInput != 0);
     }
 
     public static void searchMenu() {
@@ -277,75 +303,93 @@ public class Main {
             System.out.println("Vill du söka efter kategori eller fritextsöka?" +
                     "\n1 - Söka efter fritext\n2 - Söka efter kategori\n" +
                     "3 - Söka efter produkt ID\n4 - Åter till huvudmenyn");
-            try{
+            try {
                 userChoice = input.nextInt();
                 input.nextLine(); //consumes rest of line
                 if (userChoice < 1 || userChoice > 4) {
                     System.out.println("Felaktig inmatning, vänligen ange nummer 1-4...");
                     isUserInputInvalid = true;
-                }else {
+                } else {
                     isUserInputInvalid = false;
                 }
-                    switch (userChoice) {
-                        case 1 -> freeTextSearch();
-                        case 2 -> printProducts();
-                        case 3 -> searchById();
-                        case 4 -> {break;} //to be super clear...
-                    }
+                switch (userChoice) {
+                    case 1 -> freeTextSearch();
+                    case 2 -> printProducts();
+                    case 3 -> searchById();
+                    case 4 -> {
+                        break;
+                    } //to be super clear...
+                }
 
-            }catch(Exception e){
+            } catch (Exception e) {
                 input.nextLine(); //consumes rest of line of userChoice
                 System.out.println("Här gick det snett, vänligen välj alternativ 1 - 4...");
                 isUserInputInvalid = true;
             }
-        }while(userChoice != 4 || isUserInputInvalid);
+        } while (userChoice != 4 || isUserInputInvalid);
     }
 
-    public static void freeTextSearch(){
-        List<Product> searchResult= new ArrayList<>();
+    public static void freeTextSearch() {
+        List<Product> searchResult = new ArrayList<>();
 
         System.out.println("Skriv in namnet på produkten du söker\nNamn:");
         String uniqueProduct = input.nextLine();
 
-        for (ArrayList<Product> productGroup: allProducts){
-            for (Product product : productGroup){
-                if (product.getName().toLowerCase().contains(uniqueProduct.toLowerCase())){
+        for (ArrayList<Product> productGroup : allProducts) {
+            for (Product product : productGroup) {
+                if (product.getName().toLowerCase().contains(uniqueProduct.toLowerCase())) {
                     searchResult.add(product);
                 }
             }
         }
-        if(searchResult.isEmpty()) {
+        if (searchResult.isEmpty()) {
             System.out.println("Det produktnamnet finns inte...\n");
 
-        }else {
+        } else {
             for (Product p : searchResult) {
                 System.out.println(p);
             }
         }
     }
-    public static void searchById(){
+
+    public static Product searchById() {
         int userInput;
         Product foundProduct = null;
+        boolean isUserInputInvalid = true;
 
         System.out.println("ange produktID:");
-        userInput = input.nextInt();
-        input.nextLine();//consumes rest of line
+        do {
+            try {
+                userInput = input.nextInt();
+                input.nextLine();//consumes rest of line
 
-        for (ArrayList<Product> productGroup: allProducts) {
-            for (Product product : productGroup) {
-                if (product.getProductId() == userInput) {
-                    foundProduct = product;
-                    break;
+                for (ArrayList<Product> productGroup : allProducts) {
+                    for (Product product : productGroup) {
+                        if (product.getProductId() == userInput) {
+                            foundProduct = product;
+                            break;
+                        }
+                    }
+                    if (foundProduct != null) {
+                        System.out.println(foundProduct);
+                        return foundProduct;
+                    }
                 }
+                System.out.println("Ingen produkt med det ID");
+                return foundProduct;
+
+            } catch (Exception e) {
+                input.nextLine();//consumes rest of line
+                isUserInputInvalid = true;
+                System.out.println("felaktig inmatning\nange produktID:");
             }
-            if (foundProduct != null) {
-                break;
-            }
-        }
-        System.out.println(foundProduct);
+
+        } while (isUserInputInvalid);
+        return foundProduct;
     }
+
     private static void printProducts() {
-        int userChoice =7;
+        int userChoice = 7;
         boolean isUserInputInvalid = false;
         do {
             System.out.println("vilka produkter vill du visa?");
@@ -401,7 +445,7 @@ public class Main {
                         return;
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 input.nextLine();//consumes rest of Line of userChoice
                 System.out.println("vänligen välj ett alternativ mellan 1-7...");
                 isUserInputInvalid = true;
@@ -412,19 +456,21 @@ public class Main {
 
     public static void priceOfProducts() {
         searchById();
-        int userChoice=3;
+        int userChoice = 3;
         System.out.println("\nRäkna ut pris. Välj ett alternativ nedan\n" +
                 "1 - Kilopris\n" +
                 "2 - Styckpris\n" +
                 "3 - åter till huvudmenyn");
 
-            switch (userChoice) {
-                case 1 -> {
-                }
-                case 2 -> {
-                }
-                case 3 -> {return;}
+        switch (userChoice) {
+            case 1 -> {
             }
+            case 2 -> {
+            }
+            case 3 -> {
+                return;
+            }
+        }
     }
 
 
