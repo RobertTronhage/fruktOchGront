@@ -62,6 +62,10 @@ public class Product {
         this.price = price;
     }
 
+    public void setUnitPriceByWeight(boolean unitPriceByWeight) {
+        this.unitPriceByWeight = unitPriceByWeight;
+    }
+
     @Override
     public String toString() {
         if (unitPriceByWeight){
