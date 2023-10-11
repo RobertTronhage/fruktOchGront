@@ -1,6 +1,5 @@
 //Robert Tronhage, robert.tronhage@iths.se
 public class Product {
-
     private String name;
     private String productGroup;
     //Price in SEK
@@ -51,7 +50,6 @@ public class Product {
     public boolean isUnitPriceByWeight() {
         return unitPriceByWeight;
     }
-
     public void setName(String newName) {
         this.name = newName;
     }
@@ -61,7 +59,6 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
-
     public void setUnitPriceByWeight(boolean unitPriceByWeight) {
         this.unitPriceByWeight = unitPriceByWeight;
     }

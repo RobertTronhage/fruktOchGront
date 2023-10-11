@@ -1,7 +1,6 @@
 //Robert Tronhage, robert.tronhage@iths.se
 
 
-//Lägg till felhantering för alla metoder
 
 
 import java.util.*;
@@ -18,25 +17,7 @@ public class Main {
     static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Product p1 = new Product("aaaaaaaaaa", "Rotfrukt", 44, true);
-        Product p2 = new Product("bbbbbbbb", "Frukt", 44, false);
-        Product p3 = new Product("cccccccc", "Rotfrukt", 44, true);
-        Product p4 = new Product("ddddddddd", "Svamp", 44, false);
-        Product p5 = new Product("eeeeeeee", "Rotfrukt", 44, true);
-        Product p6 = new Product("ffffff", "Ingen kategori", 444, false);
-        Product p7 = new Product("gggggggg", "Ingen kategori", 144, true);
-        Product p8 = new Product("hhhhhhhhhh", "Grönsaker", 4, true);
-        Product p9 = new Product("iiiiiiii", "Grönsaker", 44, true);
 
-        allRootVegetables.add(p1);
-        allFruits.add(p2);
-        allRootVegetables.add(p3);
-        allMushrooms.add(p4);
-        allRootVegetables.add(p5);
-        allUnassignedProductGroup.add(p6);
-        allUnassignedProductGroup.add(p7);
-        allVegetables.add(p8);
-        allVegetables.add(p9);
 
         allProducts.add(allFruits);
         allProducts.add(allVegetables);
@@ -148,7 +129,6 @@ public class Main {
 
         } while (isUserInputInvalid);
         Product newProduct = new Product(productName, productGroup, productPrice, unitPriceByWeight);
-        //switch behövde konstanta cases, kan inte lägga productgrouparray[], därav if satser...
         if (productGroup.equals(productGroupArray[0])) {
             allFruits.add(newProduct);
         } else if (productGroup.equals(productGroupArray[1])) {
@@ -237,6 +217,7 @@ public class Main {
         List<Product> searchResult = new ArrayList<>();
 
         System.out.println("Skriv in namnet på produkten du söker\nNamn:");
+
         String uniqueProduct = input.nextLine();
 
         for (ArrayList<Product> productGroup : allProducts) {
@@ -254,6 +235,7 @@ public class Main {
                 System.out.println(p);
             }
         }
+
     }
 
     private static Product searchById() {
@@ -423,7 +405,6 @@ public class Main {
                         for (int i = 0; i < productGroup.size(); i++) {
                             if (productGroup.contains(foundProduct)) {
                                 productGroup.remove(foundProduct);
-                                //switch behövde konstanta cases, kan inte lägga productgrouparray[], därav if satser...
                                 String tempFoundProduct = foundProduct.getProductGroup();
                                 if (tempFoundProduct.equals(productGroupArray[0])) {
                                     allFruits.add(foundProduct);
@@ -531,7 +512,7 @@ public class Main {
 
             } catch (Exception e) {
                 input.nextLine();
-                System.out.println("vrobliem");
+                System.out.println("Felaktig inmatning, välj alternativ 1 eller 2...");
                 isUserInputInvalid = true;
 
             }
