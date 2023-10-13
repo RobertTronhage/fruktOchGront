@@ -1,4 +1,6 @@
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,39 +10,39 @@ class ProductTest {
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getName() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getProductGroup() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getPrice() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getProductId() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void setName() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void setProductGroup() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void setPrice() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void setUnitPriceByWeight() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testToString() {
     }
 }
