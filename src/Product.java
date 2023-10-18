@@ -15,24 +15,6 @@ public class Product {
         this.productId = Main.productIdTracker++;
     }
 
-    public Product(String name, String productGroup, double price) {
-        this.name = name;
-        this.productGroup = productGroup;
-        this.price = price;
-        this.productId = Main.productIdTracker++;
-    }
-
-    public Product(String name, double price) {
-        this.name = name;
-        this.price = price;
-        this.productId = Main.productIdTracker++;
-    }
-
-    public Product(String name){
-    this.name = name;
-    this.productId = Main.productIdTracker++;
-    }
-
     public String getName() {
         return name;
     }
@@ -47,9 +29,6 @@ public class Product {
         return productId;
     }
 
-    public boolean isUnitPriceByWeight() {
-        return unitPriceByWeight;
-    }
     public void setName(String newName) {
         this.name = newName;
     }
