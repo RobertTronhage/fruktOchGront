@@ -14,8 +14,11 @@ public class Main {
     public static String[] productGroupArray = {"Frukt", "Grönsaker", "Rotfrukt", "Svamp", "Ingen kategori"};
     public static int productIdTracker = 1;
     static Scanner input = new Scanner(System.in);
+    static String GREEN = "\u001B[32m";
+    static String RESET = "\u001B[0m";
 
     public static void main(String[] args) {
+
         initAllProducts();
         mainMenu();
         System.out.println("Tack för att du använder supervåg 3000,\n hejdååå! :)");
@@ -79,7 +82,7 @@ public class Main {
     private static void adminMenu() {
 
 
-        System.out.println("Välkommen kamrat");
+        System.out.println(GREEN + "Välkommen kamrat");
         int menuOption;
         do {
             System.out.println("============================\n"
@@ -91,7 +94,7 @@ public class Main {
                     + "5 - Pris på produkter\n"
                     + "6 - lägg till Kampanjpris\n"
                     + "7 - Skapa ny användare\n"
-                    + "8 - Logga ut");
+                    + "8 - Logga ut" + RESET);
 
             menuOption = getValidIntegerInput(input, 1, 8);
 
@@ -157,7 +160,7 @@ public class Main {
 
         String productName = getProductName();
 
-        System.out.println("Lägg till pris på produkten:");
+        System.out.println(GREEN + "Lägg till pris på produkten:");
 
         double productPrice = getValidDoubleInput(input, 0);
 
@@ -197,7 +200,7 @@ public class Main {
         int categoryChoice;
         String productGroup = "";
 
-        System.out.println("Ange vilken kategori produkten ska tillhöra");
+        System.out.println(GREEN + "Ange vilken kategori produkten ska tillhöra");
         System.out.println("1 - " + productGroupArray[0] +
                 "\n2 - " + productGroupArray[1] +
                 "\n3 - " + productGroupArray[2] +
@@ -362,7 +365,7 @@ public class Main {
             return;
         }
         do {
-            System.out.println("Vad vill du ändra?\n1 - Produktnamn\n2 - Pris \n3 - produktgrupp\n" +
+            System.out.println(GREEN + "Vad vill du ändra?\n1 - Produktnamn\n2 - Pris \n3 - produktgrupp\n" +
                     "4 - Prissättningsmodell (vikt/styck)\n" +
                     "5 - Åter till huvudmenyn");
 
@@ -445,7 +448,7 @@ public class Main {
 
         Product foundProduct = searchById();
 
-        System.out.println("Du har valt " + foundProduct.getName() +
+        System.out.println(GREEN + "Du har valt " + foundProduct.getName() +
                 "\n Är du säker på att du vill ta bort Produkten?\n" +
                 "1 - Ta bort vald produkt\n2 - Avbryt och åter till huvudmenyn");
 
@@ -471,16 +474,33 @@ public class Main {
         System.out.println("Vad vill du lägga till för slags kampanj?\n" +
                 "1 - Kampanjpris i %\n" +
                 "2 - Kampanjpris i SEK\n" +
-                "3 - Åter till huvudmenyn");
+                "3 - Kampanjpris i % på hel kategori\n" +
+                "4 - Kampanjpris i SEK på hel kategori\n" +
+                "5 - Åter till huvudmenyn");
 
-        userinput = getValidIntegerInput(input, 1, 3);
+        userinput = getValidIntegerInput(input, 1, 5);
 
         switch (userinput) {
-            case 1 -> System.out.println("%");
-            //Hitta produkt och lägg till ett kampanjpris..
-            case 2 -> System.out.println("SEK");
+            case 1 -> {
+                Product foundProduct = searchById();
+                System.out.println("Hur mycket rabatt vill du lägga till?");
+                double campainInPrecent = getValidDoubleInput(input,0);
+
+                //foundProduct.setCampainPriceInPercent
+
+            }
+
+            case 2 -> {
+                Product foundProduct = searchById();
+                System.out.println("Hur mycket rabatt vill du lägga till?");
+
+            }
 
         }
+    }
+
+    private static void displayCampains(){
+
     }
 
 }
