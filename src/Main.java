@@ -25,6 +25,23 @@ public class Main {
     }
 
     private static void initAllProducts() {
+
+        Product p1 = new Product("aaaaaaaa", productGroupArray[0],13,true);
+        Product p2 = new Product("bbbbbbbbb", productGroupArray[1],132,false);
+        Product p3 = new Product("CCCCCCC", productGroupArray[2],13.14,true);
+        Product p4 = new Product("DDDDddddd", productGroupArray[4],1.23,false);
+        Product p5 = new Product("EEEEEEEEE", productGroupArray[3],3,true);
+        Product p6 = new Product("FffASdasd", productGroupArray[2],1,false);
+        Product p7 = new Product("gggggggg", productGroupArray[0],1.3,true);
+
+        allFruits.add(p1);
+        allVegetables.add(p2);
+        allRootVegetables.add(p3);
+        allUnassignedProductGroup.add(p4);
+        allMushrooms.add(p5);
+        allRootVegetables.add(p6);
+        allFruits.add(p7);
+
         allProducts.add(allFruits);
         allProducts.add(allVegetables);
         allProducts.add(allRootVegetables);
@@ -44,7 +61,7 @@ public class Main {
                     + "4 - Personal-inloggning\n"
                     + "5 - Avsluta program");
 
-            menuOption = getValidIntegerInput(input, 1, 4);
+            menuOption = getValidIntegerInput(input, 1, 5);
 
             switch (menuOption) {
                 case 1 -> searchMenu();
@@ -81,7 +98,6 @@ public class Main {
 
     private static void adminMenu() {
 
-
         System.out.println(GREEN + "Välkommen kamrat");
         int menuOption;
         do {
@@ -104,7 +120,7 @@ public class Main {
                 case 3 -> editProduct();
                 case 4 -> removeProduct();
                 case 5 -> calculatePriceOfProducts();
-                case 6 -> campainOnProducts();
+                case 6 -> addCampainOnProducts();
             }
         } while (menuOption != 8);
     }
@@ -306,42 +322,23 @@ public class Main {
             userChoice = getValidIntegerInput(input, 1, 7);
 
             switch (userChoice) {
-                case 1 -> {
-                    for (Product allFruit : allFruits) {
-                        System.out.print(allFruit.toString());
-                    }
-                }
-                case 2 -> {
-                    for (Product allVegetables : allVegetables) {
-                        System.out.println(allVegetables.toString());
-                    }
-                }
-                case 3 -> {
-                    for (Product allRootVegetables : allRootVegetables) {
-                        System.out.println(allRootVegetables.toString());
-                    }
-                }
-                case 4 -> {
-                    for (Product allMushrooms : allMushrooms) {
-                        System.out.println(allMushrooms.toString());
-                    }
-                }
-                case 5 -> {
-                    for (Product allUnassigned : allUnassignedProductGroup) {
-                        System.out.print(allUnassigned.toString());
-                    }
-                }
-                case 6 -> {
-                    for (ArrayList<Product> productGroup : allProducts) {
-                        for (Product product : productGroup) {
-                            System.out.println(product.toString());
-                        }
-                    }
-                }
-
+                case 1 -> printArrayList(allFruits);
+                case 2 -> printArrayList(allVegetables);
+                case 3 -> printArrayList(allRootVegetables);
+                case 4 -> printArrayList(allMushrooms);
+                case 5 -> printArrayList(allUnassignedProductGroup);
+                case 6 -> printArrayList(allProducts);
             }
-
         } while (userChoice != 7);
+    }
+    public static <T> void printArrayList(ArrayList<T> list) {
+        for (T p : list) {
+            if (p instanceof ArrayList){
+                printArrayList((ArrayList<?>) p);
+            }else {
+                System.out.println(p.toString());
+            }
+        }
     }
 
     private static void calculatePriceOfProducts() {
@@ -367,7 +364,7 @@ public class Main {
         do {
             System.out.println(GREEN + "Vad vill du ändra?\n1 - Produktnamn\n2 - Pris \n3 - produktgrupp\n" +
                     "4 - Prissättningsmodell (vikt/styck)\n" +
-                    "5 - Åter till huvudmenyn");
+                    "5 - Åter till huvudmenyn\n");
 
             userInput = getValidIntegerInput(input, 1, 5);
 
@@ -376,13 +373,13 @@ public class Main {
                     System.out.println("Ange nytt namn på produkten: ");
                     String newName = input.nextLine();
                     foundProduct.setName(newName);
-                    System.out.println("nytt namn är: " + newName);
+                    System.out.println("nytt namn är: " + newName + "\n");
                 }
                 case 2 -> {
                     System.out.println("Ange nytt pris på produkten: ");
                     double newPrice = input.nextDouble();
                     foundProduct.setPrice(newPrice);
-                    System.out.println("Nytt pris är: " + String.format("%.2f", newPrice) + " SEK");
+                    System.out.println("Nytt pris är: " + String.format("%.2f", newPrice) + " SEK\n");
                 }
                 case 3 -> {
                     foundProduct.setProductGroup(setProductGroup());
@@ -426,11 +423,11 @@ public class Main {
                     switch (userChoice) {
                         case 1 -> {
                             foundProduct.setUnitPriceByWeight(true);
-                            System.out.println("produkten sälj nu efter vikt.");
+                            System.out.println("produkten sälj nu efter vikt.\n");
                         }
                         case 2 -> {
                             foundProduct.setUnitPriceByWeight(false);
-                            System.out.println("produkten säljs nu styckvis.");
+                            System.out.println("produkten säljs nu styckvis.\n");
                         }
                         case 3 -> {
                             return;
@@ -469,7 +466,7 @@ public class Main {
         }
     }
 
-    private static void campainOnProducts() {
+    private static void addCampainOnProducts() {
         int userinput;
         System.out.println("Vad vill du lägga till för slags kampanj?\n" +
                 "1 - Kampanjpris i %\n" +
@@ -500,7 +497,7 @@ public class Main {
     }
 
     private static void displayCampains(){
-
     }
+
 
 }
