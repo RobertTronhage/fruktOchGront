@@ -65,9 +65,8 @@ public class Main {
             switch (menuOption) {
                 case 1 -> searchMenu();
                 case 2 -> calculatePriceOfProducts();
-                //case 3 -> se aktuella mafakka();
+                case 3 -> displayCampains();
                 case 4 -> verifyUserCredentials();
-
             }
         } while (menuOption != 5);
     }
@@ -141,7 +140,14 @@ public class Main {
                 "4 - Ändra lösenord på användare\n" +
                 "5 - Åter till huvudmeny");
 
-        getValidIntegerInput(input,1,5);
+        int userChoice = getValidIntegerInput(input,1,5);
+
+        switch (userChoice){
+            case 1 -> System.out.println("add");
+            case 2 -> System.out.println("change");
+            case 3 -> System.out.println("disable user");
+            case 4 -> System.out.println("change password for user");
+        }
 
         User user = new User("userPassword","userUserName",true);
 
@@ -344,7 +350,7 @@ public class Main {
             }
         } while (userChoice != 7);
     }
-    public static <T> void printArrayList(ArrayList<T> list) {
+    public static <T> void printArrayList(ArrayList<T> list){
         for (T p : list) {
             if (p instanceof ArrayList){
                 printArrayList((ArrayList<?>) p);
