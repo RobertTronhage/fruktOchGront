@@ -4,6 +4,9 @@ public class Product {
     private String productGroup;
     //Price in SEK
     private double price;
+    private double campaignPrice;
+    private ProductCampaign productCampaign;
+    private String campaignCondition;
     private boolean unitPriceByWeight;
     private final int productId;
 
@@ -14,7 +17,6 @@ public class Product {
         this.unitPriceByWeight = unitPriceByWeight;
         this.productId = Main.productIdTracker++;
     }
-
     public String getName() {
         return name;
     }
@@ -22,11 +24,29 @@ public class Product {
         return productGroup;
     }
     public double getPrice() {
+        if(productCampaign != null){
+           return campaignPrice;
+        }
         return price;
     }
 
+    public String getCampaignCondition() {
+        return campaignCondition;
+    }
+
+    public void setcampaignCondition(String campaignCondition) {
+        this.campaignCondition = campaignCondition;
+    }
+
+    public String printCampaignPrice(){
+        return ("Kampanjpris: " + campaignPrice + "Ordinarie pris: " + price);
+    }
     public int getProductId() {
         return productId;
+    }
+
+    public ProductCampaign getProductCampaign() {
+        return productCampaign;
     }
 
     public void setName(String newName) {
@@ -38,6 +58,18 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
+    public void setCampaignPrice(double campaignPrice) {
+        this.campaignPrice = campaignPrice;
+    }
+
+    public double getCampaignPrice() {
+        return campaignPrice;
+    }
+
+    public void setProductCampaign(ProductCampaign productCampaign) {
+        this.productCampaign = productCampaign;
+    }
+
     public void setUnitPriceByWeight(boolean unitPriceByWeight) {
         this.unitPriceByWeight = unitPriceByWeight;
     }
@@ -52,5 +84,6 @@ public class Product {
                     " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", price) + " SEK" + " /styck" + "}\n";
         }
     }
+
 
 }

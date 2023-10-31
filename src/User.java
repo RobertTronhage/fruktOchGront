@@ -25,6 +25,10 @@ public class User {
         this.isUserActive = isUserActive;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
     private static int generateUserId(){
         int userIdCounter = 1;
         File fin = new File("users.txt");
@@ -38,4 +42,6 @@ public class User {
         }
         return userIdCounter;
     }
+
+
 }
