@@ -17,6 +17,7 @@ public class Product {
         this.unitPriceByWeight = unitPriceByWeight;
         this.productId = Main.productIdTracker++;
     }
+
     public String getName() {
         return name;
     }
@@ -68,6 +69,10 @@ public class Product {
 
     public void setProductCampaign(ProductCampaign productCampaign) {
         this.productCampaign = productCampaign;
+    }
+
+    public boolean isUnitPriceByWeight() {
+        return unitPriceByWeight;
     }
 
     public void setUnitPriceByWeight(boolean unitPriceByWeight) {

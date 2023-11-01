@@ -15,10 +15,6 @@ public class PercentCampaign implements ProductCampaign{
     }
 
 
-    public String getCampaignConditions() {
-        return campaigncondition;
-    }
-
 //    File directory = new File("allCampaigns");
 //            if (!directory.exists()) {
 //        directory.mkdirs();

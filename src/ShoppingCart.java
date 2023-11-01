@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class ShoppingCart {
     private double totalPrice;
-    private int cartId = 1;
     private static ArrayList<Product> productsInCart;
     private static ArrayList<Double> productAmounts;
 
@@ -44,8 +43,6 @@ public class ShoppingCart {
     @Override
     public String toString() {
         return "ShoppingCart{" +
-                "totalPrice=" + totalPrice +
-                ", cartId=" + cartId +
-                '}';
+                "totalPrice=" + totalPrice +'}';
     }
 }

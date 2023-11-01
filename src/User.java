@@ -1,3 +1,4 @@
+//Robert Tronhage. robert.tronhage@iths.se
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ public class User {
     private boolean isUserAdmin;
     private boolean isUserActive;
 
+    //denna konstruktor används för att lägga till ny användare, den är alltid "aktiv"
     public User(String password, String userName, boolean isUserAdmin) {
         this.password = password;
         this.userName = userName;

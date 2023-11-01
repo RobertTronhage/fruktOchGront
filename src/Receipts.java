@@ -8,7 +8,7 @@ public class Receipts {
 
     public void generateReceipt(ShoppingCart cart) {
         Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String receiptContent = "Receipt Date: " + dateFormat.format(date) + "\n";
         receiptContent += "Number of Items: " + cart.getTotalItems() + "\n";
         receiptContent += "Total Price: " + cart.getTotalPrice() + " SEK\n";
