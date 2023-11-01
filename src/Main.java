@@ -203,7 +203,8 @@ public class Main {
         do {
             isUserInputInvalid = false;
             try {
-                userInput = input.nextDouble();
+                String inputString = input.nextLine().replace(',', '.');
+                userInput = Double.parseDouble(inputString);
 
                 if (userInput < minValue) {
                     System.out.println("Felaktig inmatning, vänligen ange ett tal över " + minValue + "...");
@@ -215,7 +216,7 @@ public class Main {
                         "Ange pris: ");
                 isUserInputInvalid = true;
             }
-            input.nextLine();
+
         } while (isUserInputInvalid);
 
         return userInput;
@@ -235,7 +236,6 @@ public class Main {
 
         double productPrice = getValidDoubleInput(input, 0);
 
-
         Product newProduct = new Product(productName, productGroup, productPrice, unitPriceByWeight);
         if (productGroup.equals(productGroupArray[0])) {
             allFruits.add(newProduct);
@@ -248,6 +248,7 @@ public class Main {
         } else if (productGroup.equals(productGroupArray[4])) {
             allUnassignedProductGroup.add(newProduct);
         }
+        System.out.println("\nProdukten: '" + newProduct.getName() + "' har skapats\n");
     }
     private static String setProductName() {
         String productName;
