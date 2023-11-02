@@ -19,6 +19,8 @@ public class User {
         this.isUserActive = true;
     }
 
+
+
     public User(int userId, String userName, String password, boolean isUserAdmin, boolean isUserActive) {
         this.userId = userId;
         this.userName = userName;
@@ -27,6 +29,9 @@ public class User {
         this.isUserActive = isUserActive;
     }
 
+    public boolean isUserAdmin() {
+        return isUserAdmin;
+    }
     public String getUserName() {
         return userName;
     }
@@ -44,6 +49,8 @@ public class User {
         }
         return userIdCounter;
     }
+
+
 
 
 }

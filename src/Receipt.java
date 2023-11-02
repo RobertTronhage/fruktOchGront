@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Receipts {
+public class Receipt {
 
-    public void generateReceipt(ShoppingCart cart) {
+    public static void generateReceipt(ShoppingCart cart) {
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String receiptContent = "Receipt Date: " + dateFormat.format(date) + "\n";
-        receiptContent += "Number of Items: " + cart.getTotalItems() + "\n";
-        receiptContent += "Total Price: " + cart.getTotalPrice() + " SEK\n";
+        String receiptContent = "Kvitto datum: " + dateFormat.format(date) + "\n";
+        receiptContent += "Totalt antal produkter: " + cart.getTotalItems() + "\n";
+        receiptContent += "Totalt pris: " + cart.getTotalPrice() + " SEK\n";
 
         // Visa kvitto på konsolen
         System.out.println(receiptContent);
@@ -20,7 +20,7 @@ public class Receipts {
         saveReceiptToFile(receiptContent);
     }
 
-    private void saveReceiptToFile(String receiptContent) {
+    public static void saveReceiptToFile(String receiptContent) {
         File directory = new File("Receipts");
         if (!directory.exists()) {
             directory.mkdirs();
@@ -31,8 +31,10 @@ public class Receipts {
                 FileWriter fileWriter = new FileWriter(fileName);
                 fileWriter.write(receiptContent);
                 fileWriter.close();
+                System.out.println("kvitto har skapats, du hittar den i roten på projektet...");
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println("he gick inte!");
             }
         }
     }

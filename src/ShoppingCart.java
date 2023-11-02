@@ -6,6 +6,7 @@ public class ShoppingCart {
     private double totalPrice;
     private static ArrayList<Product> productsInCart;
     private static ArrayList<Double> productAmounts;
+    private ShoppingCart receiptContent;
 
     public ShoppingCart(double totalPrice) {
         this.totalPrice = totalPrice;
@@ -16,6 +17,7 @@ public class ShoppingCart {
     public static void addProductToCart(Product product, double amount) {
         productsInCart.add(product);
         productAmounts.add(amount);
+
     }
 
     public static ArrayList<Double> getProductAmounts() {
@@ -24,6 +26,10 @@ public class ShoppingCart {
 
     public int getTotalItems() {
         return productsInCart.size();
+    }
+
+    public ShoppingCart getReceiptContent() {
+        return receiptContent;
     }
 
     public double getTotalPrice() {
