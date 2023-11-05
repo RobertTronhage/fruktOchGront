@@ -77,39 +77,18 @@ public class User {
 
     public static void addNewUserToFile(User newUser) {
         try {
-            String userLine=newUser.toString();
+            String userLine;
 
-            // Skapa en FileWriter för att skriva till användarfilen (till exempel "users.txt")
-            FileWriter fileWriter = new FileWriter("users.txt", true); // Använd 'true' för att tillåta att nya användare läggs till i befintlig fil
+            FileWriter fileWriter = new FileWriter("users.txt", true);
 
-            // Skriv användarinformationen i rätt format till filen
             userLine = userId + ":" + userName + ":" + password + ":" + (isUserActive ? "1" : "0") + ":" + (isUserAdmin ? "1" : "0");
             fileWriter.write(userLine + "\n");
 
-            // Stäng filen när du är klar
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-//    public static void editUserActiveToFile(User foundUser) {
-//        try {
-//            String userLine=foundUser.isUserActive();
-//
-//            // Skapa en FileWriter för att skriva till användarfilen (till exempel "users.txt")
-//            FileWriter fileWriter = new FileWriter("users.txt", true); // Använd 'true' för att tillåta att nya användare läggs till i befintlig fil
-//
-//            // Skriv användarinformationen i rätt format till filen
-//            userLine = userId + ":" + userName + ":" + password + ":" + (isUserActive ? "1" : "0") + ":" + (isUserAdmin ? "1" : "0");
-//            fileWriter.write(userLine + "\n");
-//
-//            // Stäng filen när du är klar
-//            fileWriter.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 
 }

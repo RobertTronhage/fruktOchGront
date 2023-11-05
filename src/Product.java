@@ -6,7 +6,7 @@ public class Product {
     private double price;
     private double campaignPrice;
     private ProductCampaign productCampaign;
-    private String campaignCondition;
+    private int campaignCondition;
     private boolean unitPriceByWeight;
     private final int productId;
 
@@ -21,27 +21,23 @@ public class Product {
     public String getName() {
         return name;
     }
+
     public String getProductGroup() {
         return productGroup;
     }
-    public double getPrice() {
-        if(productCampaign != null){
-           return campaignPrice;
-        }
-        return price;
-    }
 
-    public String getCampaignCondition() {
+    public int getCampaignCondition() {
         return campaignCondition;
     }
 
-    public void setcampaignCondition(String campaignCondition) {
+    public void setcampaignCondition(int campaignCondition) {
         this.campaignCondition = campaignCondition;
     }
 
-    public String printCampaignPrice(){
+    public String printCampaignPrice() {
         return ("Kampanjpris: " + campaignPrice + "Ordinarie pris: " + price);
     }
+
     public int getProductId() {
         return productId;
     }
@@ -53,22 +49,33 @@ public class Product {
     public void setName(String newName) {
         this.name = newName;
     }
+
     public void setProductGroup(String productGroup) {
         this.productGroup = productGroup;
     }
+
     public void setPrice(double price) {
         this.price = price;
     }
-    public void setCampaignPrice(double campaignPrice) {
-        this.campaignPrice = campaignPrice;
+
+    private void setCampaignPrice() {
+        this.campaignPrice = productCampaign.calculateCampaignPrice(price);
     }
 
-    public double getCampaignPrice() {
-        return campaignPrice;
+    public double getPrice() {
+        if (productCampaign != null) {
+            return campaignPrice;
+        }
+        return price;
+    }
+
+    public double getRegularPrice() {
+        return price;
     }
 
     public void setProductCampaign(ProductCampaign productCampaign) {
         this.productCampaign = productCampaign;
+        setCampaignPrice();
     }
 
     public boolean isUnitPriceByWeight() {
@@ -81,12 +88,12 @@ public class Product {
 
     @Override
     public String toString() {
-        if (unitPriceByWeight){
+        if (unitPriceByWeight) {
             return "{" + "ProduktId: " + productId +
-                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", price) + " SEK" + " /kilo" + "}\n";
-        }else{
+                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", getPrice()) + " SEK" + " /kilo" + "}\n";
+        } else {
             return "{" + "ProduktId: " + productId +
-                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", price) + " SEK" + " /styck" + "}\n";
+                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", getPrice()) + " SEK" + " /styck" + "}\n";
         }
     }
 

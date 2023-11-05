@@ -2,26 +2,30 @@ import java.io.File;
 
 public class PercentCampaign implements ProductCampaign{
 
-    private double campaignPrice;
-    private String campaigncondition;
+    private double salePercent;
 
-    public PercentCampaign(double price) {
-        campaignPrice = price /2;
+    private String campaignName;
+
+    public PercentCampaign(double salePercent,String campaignName) {
+        this.salePercent=salePercent;
+        this.campaignName=campaignName;
+    }
+
+    public String getCampaignName() {
+        return campaignName;
     }
 
     @Override
-    public double getCampaignPrice() {
-        return campaignPrice;
+    public double calculateCampaignPrice(double price) {
+        double saleInDecimal = salePercent / 100;
+        double remainingMultiplier = 1-saleInDecimal;
+        return price * remainingMultiplier;
     }
 
 
-//    File directory = new File("allCampaigns");
-//            if (!directory.exists()) {
-//        directory.mkdirs();
 
-    @Override
-    public String getCampaignCondition() {
-        return campaigncondition;
+    public static void setAmountOfDiscount(){
+
     }
 
 }

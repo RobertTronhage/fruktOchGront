@@ -15,6 +15,7 @@ public class Main {
     public static ArrayList<ArrayList<Product>> allProducts = new ArrayList<>();
     public static ArrayList<Product> productsInCart = new ArrayList<>();
     public static ArrayList<Double> productAmounts = new ArrayList<>();
+    public static ArrayList<ProductCampaign> allCampaigns = new ArrayList<>();
     public static String[] productGroupArray = {"Frukt", "Grönsaker", "Rotfrukt", "Svamp", "Ingen kategori"};
     public static int productIdTracker = 1;
     static Scanner input = new Scanner(System.in);
@@ -29,6 +30,7 @@ public class Main {
         mainMenu();
         System.out.println("Tack för att du använder supervåg 3000,\n hejdååå! :)");
     }
+
     private static void initAllProducts() {
 
         Product p1 = new Product("aaaaaaaa", productGroupArray[0], 13, true);
@@ -39,11 +41,14 @@ public class Main {
         Product p6 = new Product("FffASdasd", productGroupArray[2], 1, false);
         Product p7 = new Product("gggggggg", productGroupArray[0], 1.3, true);
 
-        PercentCampaign a = new PercentCampaign(p4.getPrice());
-        p4.setcampaignCondition("KÖP MER!!!");
+        PercentCampaign a = new PercentCampaign(50, "jkansd");
+        p4.setcampaignCondition(29);
         p4.setProductCampaign(a);
-        a.getCampaignCondition();
+        allCampaigns.add(a);
 
+        //läsa in kampanj från fil...
+        //när man ändrar/tar bort kampanj så lägger man till i den inlästa listan (som é i programmet) och skriver över ALLT!
+        //lägg till = filewrite.append?
 
         allFruits.add(p1);
         allVegetables.add(p2);
@@ -59,6 +64,7 @@ public class Main {
         allProducts.add(allMushrooms);
         allProducts.add(allUnassignedProductGroup);
     }
+
     private static void mainMenu() {
         System.out.println("Välkommen till Supervåg 3000");
         int menuOption = 6;
@@ -83,6 +89,7 @@ public class Main {
             }
         } while (menuOption != 6);
     }
+
     private static void verifyUserCredentials() {
         System.out.print("Ange användarnamn: ");
         String userName = input.nextLine();
@@ -95,8 +102,8 @@ public class Main {
             while (fileScan.hasNextLine()) {
                 String userString = fileScan.nextLine();
                 String[] splitUserString = userString.split(":");
-                boolean active = Integer.parseInt(splitUserString[3])==1;
-                boolean admin = Integer.parseInt(splitUserString[4])==1;
+                boolean active = Integer.parseInt(splitUserString[3]) == 1;
+                boolean admin = Integer.parseInt(splitUserString[4]) == 1;
                 int userId = Integer.parseInt(splitUserString[0]);
 
                 if (userName.equals(splitUserString[1]) && userPassword.equals(splitUserString[2])) {
@@ -117,6 +124,7 @@ public class Main {
             System.out.println("här vart det strul..Hittade inte filen :(");
         }
     }
+
     private static void loggedInUserMenu() {
 
         String userName = loggedInUser.getUserName();
@@ -130,7 +138,7 @@ public class Main {
                     + "3 - Ändra en produkt\n"
                     + "4 - Ta bort en produkt\n"
                     + "5 - Pris på produkter\n"
-                    + "6 - lägg till Kampanjpris\n"
+                    + "6 - Kampanjer\n"
                     + "7 - Redigera användare\n"
                     + "8 - Logga ut");
 
@@ -142,16 +150,17 @@ public class Main {
                 case 3 -> editProduct();
                 case 4 -> removeProduct();
                 case 5 -> calculatePriceOfProducts();
-                case 6 -> addCampaignOnProducts();
+                case 6 -> CampaignOnProducts();
                 case 7 -> editUsers();
             }
         } while (menuOption != 8);
         System.out.print(RESET);
     }
+
     public static void editUsers() {
         int userChoice;
 
-        if (!loggedInUser.isUserAdmin()){
+        if (!loggedInUser.isUserAdmin()) {
             System.out.println("Endast Användare med Admin-behörighet kan komma åt denna tjänst...");
             return;
         }
@@ -175,11 +184,12 @@ public class Main {
                 case 5 -> printAllUsers();
             }
 
-        }while(userChoice!=6);
+        } while (userChoice != 6);
     }
-    public static User findUserById(){
+
+    public static User findUserById() {
         System.out.println("Ange användarens ID:");
-        int userId=getValidIntegerInput(input,1,Integer.MAX_VALUE);
+        int userId = getValidIntegerInput(input, 1, Integer.MAX_VALUE);
         boolean admin;
         boolean active;
         String password;
@@ -187,45 +197,57 @@ public class Main {
         User foundUser = null;
 
         File fin = new File("users.txt");
-            try (Scanner fileScan = new Scanner(fin)) {
-                while (fileScan.hasNextLine()) {
-                    String userString = fileScan.nextLine();
-                    String[] splitUserString = userString.split(":");
-                    int id = Integer.parseInt(splitUserString[0]);
+        try (Scanner fileScan = new Scanner(fin)) {
+            while (fileScan.hasNextLine()) {
+                String userString = fileScan.nextLine();
+                String[] splitUserString = userString.split(":");
+                int id = Integer.parseInt(splitUserString[0]);
 
-                    if (id == userId) {
-                        userName = splitUserString[1];
-                        password = splitUserString[2];
-                        active = Integer.parseInt(splitUserString[3]) == 1;
-                        admin = Integer.parseInt(splitUserString[4]) == 1;
-                        foundUser = new User(userId,userName,password,active,admin);
-                    }else {
-                        System.out.println("användaren hittades inte");
-                    }
+                if (id == userId) {
+                    userName = splitUserString[1];
+                    password = splitUserString[2];
+                    active = Integer.parseInt(splitUserString[3]) == 1;
+                    admin = Integer.parseInt(splitUserString[4]) == 1;
+                    foundUser = new User(userId, userName, password, active, admin);
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             }
+            if (foundUser == null) {
+                System.out.println("användaren hittades inte");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         return foundUser;
     }
-    public static void editUserAdminPriv(){
+
+    public static void editUserAdminPriv() {
         User foundUser = findUserById();
 
-        if (foundUser == null){
+        if (foundUser == null) {
             return;
         }
 
-        System.out.println("det funkade!!!");
-        System.out.println(foundUser);
+        System.out.println("välj nedan:\n" +
+                "1 - Ge användare Admin-rättigheter\n" +
+                "2 - Ta bort användarens Admin-rättigheter\n" +
+                "3 - Avbryt och åter redigeringsmeny");
 
+        int userChoice = getValidIntegerInput(input, 1, 3);
 
+        if (userChoice == 1) {
+            foundUser.setUserAdmin(true);
+        } else if (userChoice == 2) {
+            foundUser.setUserAdmin(false);
+        }
 
+        System.out.println("det funkade! " + foundUser.getUserName() + " har nu " + (foundUser.isUserAdmin() ? "Adminrättigheter" : "INTE Adminrättigheter"));
     }
-    public static void editUserActive(){
+
+    public static void editUserActive() {
         User foundUser = findUserById();
 
-        if (foundUser==null){
+        if (foundUser == null) {
             return;
         }
 
@@ -234,20 +256,19 @@ public class Main {
                 "2 - Inaktivera användare\n" +
                 "3 - Åter till redigerings-meny");
 
-        int userChoice = getValidIntegerInput(input,1,3);
+        int userChoice = getValidIntegerInput(input, 1, 3);
 
-        if (userChoice == 1){
-            System.out.println("användaren: " + foundUser.getUserName() + " har Aktiverats...");
+        if (userChoice == 1) {
             foundUser.setUserActive(true);
-            System.out.println(foundUser.isUserActive());
-        }else if (userChoice == 2){
-            System.out.println("användaren: " + foundUser.getUserName() + " har inaktiverats...");
+        } else if (userChoice == 2) {
             foundUser.setUserActive(false);
-            System.out.println(foundUser.isUserActive());
         }
+
+        System.out.println("användaren: " + foundUser.getUserName() + (foundUser.isUserActive() ? " har Aktiverats..." : " har inaktiverats..."));
 //        User.editUserActiveToFile();
     }
-    public static void printAllUsers(){
+
+    public static void printAllUsers() {
 
         File fin = new File("users.txt");
         try (Scanner fileScan = new Scanner(fin)) {
@@ -260,7 +281,11 @@ public class Main {
             System.out.println("ojdå");
         }
     }
-    public static void addUser(){
+
+    public static void addUser() {
+
+        //TODO lägg till så man inte kan ha tecknet ":" i namn eller lösen!
+
         System.out.println("Ange användarnamn för den nya användaren:");
         String userName = input.nextLine();
         System.out.println("Ange lösenord för den nya användaren:");
@@ -268,15 +293,16 @@ public class Main {
         System.out.println("ska den nya användaren ha Admin rättigheter?\n" +
                 "1 - Ja\n" +
                 "2 - Nej");
-        int isUserAdmin = getValidIntegerInput(input,1,2);
+        int isUserAdmin = getValidIntegerInput(input, 1, 2);
         boolean isAdmin = isUserAdmin == 1;
 
-        User newUser = new User(userPassword,userName,isAdmin);
+        User newUser = new User(userPassword, userName, isAdmin);
         System.out.println("Användare: " + userName + " har skapats");
         System.out.println(newUser);
         User.addNewUserToFile(newUser);
 
     }
+
     public static int getValidIntegerInput(Scanner input, int minValue, int maxValue) {
         int userInput = 0;
         boolean isUserInputInvalid;
@@ -298,6 +324,7 @@ public class Main {
 
         return userInput;
     }
+
     public static double getValidDoubleInput(Scanner input, double minValue) {
         double userInput = 0.0;
         boolean isUserInputInvalid;
@@ -313,9 +340,7 @@ public class Main {
                     isUserInputInvalid = true;
                 }
             } catch (InputMismatchException e) {
-                System.out.println("felaktig inmatning, vänligen ange pris i kronor \n" +
-                        "Om det är decimaler i priset måste detta anges med deicmal-komma...\n" +
-                        "Ange pris: ");
+                System.out.println("felaktig inmatning, vänligen ange pris i kronor \nAnge pris: ");
                 isUserInputInvalid = true;
             }
 
@@ -323,6 +348,7 @@ public class Main {
 
         return userInput;
     }
+
     private static void addProduct() {
         String productGroup = setProductGroup();
 
@@ -352,6 +378,7 @@ public class Main {
         }
         System.out.println("\nProdukten: '" + newProduct.getName() + "' har skapats\n");
     }
+
     private static String setProductName() {
         String productName;
         do {
@@ -363,6 +390,7 @@ public class Main {
         } while (productName.isEmpty());
         return productName;
     }
+
     private static String setProductGroup() {
         int categoryChoice;
         String productGroup = "";
@@ -385,6 +413,7 @@ public class Main {
         }
         return productGroup;
     }
+
     private static void searchMenu() {
 
         int userChoice;
@@ -404,6 +433,7 @@ public class Main {
 
         } while (userChoice != 4);
     }
+
     private static void freeTextSearch() {
         List<Product> searchResult = new ArrayList<>();
 
@@ -428,6 +458,7 @@ public class Main {
         }
 
     }
+
     private static Product searchById() {
         int userInput;
         Product foundProduct = null;
@@ -453,6 +484,7 @@ public class Main {
             return null;
         }
     }
+
     private static void searchByCategory() {
         int userChoice;
 
@@ -478,6 +510,7 @@ public class Main {
             }
         } while (userChoice != 7);
     }
+
     public static <T> void printArrayList(ArrayList<T> list) {
         for (T p : list) {
             if (p instanceof ArrayList) {
@@ -487,7 +520,8 @@ public class Main {
             }
         }
     }
-    private static void calculatePriceOfProducts(){
+
+    private static void calculatePriceOfProducts() {
 
         Product foundProduct = searchById();
 
@@ -499,28 +533,32 @@ public class Main {
 
         double amount = getValidDoubleInput(input, 0);
 
-            double calculatedAmount = (foundProduct.getPrice() * amount);
-            if (amount != 0) {
-                System.out.println("totalpriset är: " + String.format("%.2f", calculatedAmount) + " SEK\n");
+        double calculatedAmount = (foundProduct.getPrice() * amount);
+        if (amount != 0) {
+            System.out.println("totalpriset är: " + String.format("%.2f", calculatedAmount) + " SEK\n");
+            if (loggedInUser==null) {
                 addToShoppingCart(foundProduct, amount);
             }
+        }
     }
+
     private static void addToShoppingCart(Product foundProduct, double amount) {
         System.out.println("Vill du lägga till följande till kundvagnen?\n" +
                 "1 - Ja\n" +
                 "2 - Nej");
-        int userChoice = getValidIntegerInput(input,1,2);
-        if (userChoice==1){
-            if (shoppingCart == null){
+        int userChoice = getValidIntegerInput(input, 1, 2);
+        if (userChoice == 1) {
+            if (shoppingCart == null) {
                 shoppingCart = new ShoppingCart(0.0);
             }
 
             shoppingCart.addProductToCart(foundProduct, amount);
             System.out.println((foundProduct.getName() + " har lagts till till kundvagnen\n"));
-        }else {
+        } else {
             System.out.println("Produkten har inte lagts till i kundvagnen.");
         }
     }
+
     public static void printShoppingCart() {
         if (shoppingCart == null) {
             System.out.println("Det finns ingenting i varukorgen...");
@@ -537,10 +575,10 @@ public class Main {
             for (int i = 0; i < productsInCart.size(); i++) {
                 Product product = productsInCart.get(i);
                 double amount = productAmounts.get(i);
-                String priceUnit = product.isUnitPriceByWeight() ? "per kilo":"per styck";
-                String amountSuffix = product.isUnitPriceByWeight() ? "kg, ":"st, ";
-                System.out.println("Produkt: " + product.getName()+ ", " + amount + amountSuffix +
-                        "Pris " + priceUnit + ": " + product.getPrice() + " SEK, Total: " + (amount * product.getPrice()));
+                String priceUnit = product.isUnitPriceByWeight() ? "per kilo" : "per styck";
+                String amountSuffix = product.isUnitPriceByWeight() ? "kg, " : "st, ";
+                System.out.println("Produkt: " + product.getName() + ", " + amount + amountSuffix +
+                        "Pris " + priceUnit + ": " + String.format("%.2f", product.getPrice()) + " SEK, Total: " + String.format("%.2f", (amount * product.getPrice())));
             }
 
             System.out.println("\nAntal unika produkter i varukorgen: " + shoppingCart.getTotalItems());
@@ -550,16 +588,17 @@ public class Main {
                     "2 - Fortsätt handla\n" +
                     "3 - Rensa varukorg");
 
-            int userChoice = getValidIntegerInput(input,1,3);
+            int userChoice = getValidIntegerInput(input, 1, 3);
 
-            switch (userChoice){
+            switch (userChoice) {
                 case 1 -> {
                     Receipt receipt = new Receipt();
                     Receipt.generateReceipt(shoppingCart);
-
+                    productsInCart.clear();
+                    productAmounts.clear();
                 }
                 case 2 -> {
-                    return;
+
                 }
                 case 3 -> {
                     productsInCart.clear();
@@ -568,6 +607,7 @@ public class Main {
             }
         }
     }
+
     private static void editProduct() {
         int userInput = 0;
         Product foundProduct = searchById();
@@ -653,6 +693,7 @@ public class Main {
             }
         } while (userInput != 5);
     }
+
     private static void removeProduct() {
 
         Product foundProduct = searchById();
@@ -678,72 +719,66 @@ public class Main {
             System.out.println("Avbryter! " + foundProduct.getName() + " raderas EJ!");
         }
     }
-    private static void addCampaignOnProducts() {
+
+    private static void CampaignOnProducts() {
         int userinput;
-        System.out.println("Vad vill du lägga till för slags kampanj?\n" +
-                "1 - Kampanjpris i %\n" +
-                "2 - Kampanjpris i SEK\n" +
-                "3 - Kampanjpris i % på hel kategori\n" +
-                "4 - Kampanjpris i SEK på hel kategori\n" +
-                "5 - Åter till personalmeny");
+        System.out.println("Vad vill du göra?\n" +
+                "1 - Skapa en ny kampanj\n" +
+                "2 - Lägga till kampanj på produkt\n" +
+                "3 - Åter till personalmeny");
 
         userinput = getValidIntegerInput(input, 1, 5);
 
         switch (userinput) {
-            case 1 -> setCampaignInPercent();
-            case 2 -> setCampaignInSek();
-            case 3 -> setCampaignInPercentOnProductGroup();
-            case 4 -> setCampaignInSekOnProductGroup();
-
+            case 1 -> createNewCampaign();
+            case 2 -> setCampaignOnProduct();
         }
     }
-    private static void setCampaignInPercent() {
-        Product foundProduct = searchById();
-        if (foundProduct == null){
-            return;
-        }
+
+    private static void createNewCampaign() {
+
+        System.out.println("vad vill du kalla din kampanj? t ex 'Black Friday REA'");
+        String nameOfCampaign = input.nextLine();
         System.out.println("Hur många % rabatt vill du lägga till?");
         double campaignInPercent = getValidDoubleInput(input, 0);
-        System.out.println("vad ska det vara för vilkor för att rabatten ska gälla?");
-        System.out.println("1 - Köp X antal av " + foundProduct.getName() + "\n" +
-                "2 - Avbryt och åter...");
-        int conditionForCampaign = getValidIntegerInput(input, 1,2);
-        if (conditionForCampaign == 1) {
-            foundProduct.setCampaignPrice(campaignInPercent);
-        }
+        ProductCampaign percentCampaign = new PercentCampaign(campaignInPercent, nameOfCampaign);
+        allCampaigns.add(percentCampaign);
     }
-    private static void setCampaignInSek() {
+
+    private static void setCampaignOnProduct() {
         Product foundProduct = searchById();
-        if (foundProduct == null){
+        if (foundProduct == null) {
             return;
         }
-        System.out.println("Hur många % rabatt vill du lägga till?");
-        double campaignInSek = getValidDoubleInput(input, 0);
-        System.out.println("vad ska det vara för vilkor för att rabatten ska gälla?");
-        System.out.println("1 - Köp X antal av " + foundProduct.getName() + "\n");
-        int conditionForCampaign = getValidIntegerInput(input, 1,2);
-        if (conditionForCampaign == 1) {
-            foundProduct.setCampaignPrice(campaignInSek);
+
+        System.out.println("vilken kampanj vill du ha på produkten?");
+        for (int i = 0; i < allCampaigns.size(); i++) {
+            System.out.println(i + 1 + " " + allCampaigns.get(i).getCampaignName());
         }
+        int userChoice = getValidIntegerInput(input, 1, Integer.MAX_VALUE);
+
+        ProductCampaign foundCampaign = allCampaigns.get(userChoice - 1);
+
+        foundProduct.setProductCampaign(foundCampaign);
+
+        System.out.println("Ange hur många enheter kund måste köpa för att rabatten ska gälla:");
+
+        foundProduct.setcampaignCondition(getValidIntegerInput(input, 1, Integer.MAX_VALUE));
+
     }
-    private static void setCampaignInPercentOnProductGroup() {
-//ska man ha kampanjer på hela kategorier???
-    }
-    private static void setCampaignInSekOnProductGroup() {
-//ska man ha kampanjer på hela kategorier???
-    }
+
     private static void printCampaigns() {
-        System.out.println("Aktuella kampanjer:");
+        System.out.println("Aktuella kampanjer: ");
 
         for (ArrayList<Product> productGroup : allProducts) {
             for (Product product : productGroup) {
                 if (product.getProductCampaign() != null) {
-                    double originalPrice = product.getPrice();
-                    double discountedPrice = product.getCampaignPrice();
-                    String campaignCondition = product.getProductCampaign().getCampaignCondition();
+                    double originalPrice = product.getRegularPrice();
+                    double discountedPrice = product.getPrice();
+                    int campaignCondition = product.getCampaignCondition();
 
-                    System.out.println("Produkt: " + product.getName() + ", Ordinarie pris: " + originalPrice + " SEK "+
-                            "Kampanjpris: " + discountedPrice + " SEK " + "Villkor: " + campaignCondition);
+                    System.out.println("Produkt: " + product.getName() + ", Ordinarie pris: " + originalPrice + " SEK " +
+                            "Kampanjpris: " + String.format("%.2f", discountedPrice) + " SEK " + "Villkor för kampanj: " + campaignCondition);
                 }
             }
         }

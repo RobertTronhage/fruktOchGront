@@ -9,9 +9,10 @@ public class Receipt {
     public static void generateReceipt(ShoppingCart cart) {
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String receiptContent = "Kvitto datum: " + dateFormat.format(date) + "\n";
-        receiptContent += "Totalt antal produkter: " + cart.getTotalItems() + "\n";
-        receiptContent += "Totalt pris: " + cart.getTotalPrice() + " SEK\n";
+        String receiptContent = "Kvitto No: " + dateFormat.format(date) + "\n\n\n" +
+                                "Antal\t\t\tProdukt\t\t\tTot\n" +
+                                generateProductAmountInReceipt(cart)+
+                                "\n\n\nTotalt pris: " + String.format("%2f", cart.getTotalPrice()) + " SEK\n";
 
         // Visa kvitto på konsolen
         System.out.println(receiptContent);
@@ -20,22 +21,34 @@ public class Receipt {
         saveReceiptToFile(receiptContent);
     }
 
+    public static String generateProductAmountInReceipt(ShoppingCart cart){
+        String productAmount="";
+
+        for (int i = 0; i < cart.getProductAmounts().size(); i++) {
+            productAmount += cart.getProductAmounts().get(i)+"\t\t\t" + cart.getAllProductsInCart().get(i).getName()+
+                    "\t\t\t"+ cart.getAllProductsInCart().get(i).getPrice()*cart.getProductAmounts().get(i)+"\n";
+        }
+        return productAmount;
+    }
     public static void saveReceiptToFile(String receiptContent) {
         File directory = new File("Receipts");
         if (!directory.exists()) {
-            directory.mkdirs();
-
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-                String fileName = "Receipts/Receipt_" + dateFormat.format(new Date()) + ".txt";
-                FileWriter fileWriter = new FileWriter(fileName);
-                fileWriter.write(receiptContent);
-                fileWriter.close();
-                System.out.println("kvitto har skapats, du hittar den i roten på projektet...");
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("he gick inte!");
+            if (directory.mkdirs()) {
+                System.out.println("Mappen 'Receipts' har skapats.");
+            } else {
+                System.out.println("Kunde inte skapa mappen 'Receipts'.");
             }
+        }
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+            String fileName = "Receipts/Receipt_" + dateFormat.format(new Date()) + ".txt";
+            FileWriter fileWriter = new FileWriter(fileName);
+            fileWriter.write(receiptContent);
+            fileWriter.close();
+            System.out.println("kvitto har skapats, du hittar det i mappen Receipts i roten på projektet...");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("he gick inte!");
         }
     }
 }

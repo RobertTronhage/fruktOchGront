@@ -1,6 +1,6 @@
 public interface ProductCampaign {
-    double getCampaignPrice();
+    double calculateCampaignPrice(double price);
 
-    String getCampaignCondition();
+    String getCampaignName();
 
 }
