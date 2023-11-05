@@ -27,10 +27,12 @@ public class Product {
     }
 
     public int getCampaignCondition() {
+
         return campaignCondition;
     }
 
     public void setcampaignCondition(int campaignCondition) {
+
         this.campaignCondition = campaignCondition;
     }
 
@@ -68,6 +70,12 @@ public class Product {
         }
         return price;
     }
+    public double getPrice(double amountOfProduct) {
+        if (productCampaign != null && amountOfProduct>=campaignCondition) {
+            return campaignPrice;
+        }
+        return price;
+    }
 
     public double getRegularPrice() {
         return price;
@@ -86,14 +94,23 @@ public class Product {
         this.unitPriceByWeight = unitPriceByWeight;
     }
 
+    public void checkCampaignCondition(double amountOfProduct) {
+        if (amountOfProduct<campaignCondition){
+            System.out.println("Köp " + (campaignCondition - amountOfProduct) + (unitPriceByWeight ? "kg ":" stycken ") + " till för att få " +
+            productCampaign.getSalePercent() + "% rabatt");
+        }else{
+            System.out.println("wohoo! Du får " + productCampaign.getSalePercent() + "% rabatt");
+        }
+    }
+
     @Override
     public String toString() {
         if (unitPriceByWeight) {
             return "{" + "ProduktId: " + productId +
-                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", getPrice()) + " SEK" + " /kilo" + "}\n";
+                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", getRegularPrice()) + " SEK" + " /kilo" + "}\n";
         } else {
             return "{" + "ProduktId: " + productId +
-                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", getPrice()) + " SEK" + " /styck" + "}\n";
+                    " Produktnamn='" + name + '\'' + ", Kategori='" + productGroup + '\'' + ", Pris=" + String.format("%.2f", getRegularPrice()) + " SEK" + " /styck" + "}\n";
         }
     }
 

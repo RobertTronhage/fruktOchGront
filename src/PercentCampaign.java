@@ -11,6 +11,10 @@ public class PercentCampaign implements ProductCampaign{
         this.campaignName=campaignName;
     }
 
+    public double getSalePercent() {
+        return salePercent;
+    }
+
     public String getCampaignName() {
         return campaignName;
     }

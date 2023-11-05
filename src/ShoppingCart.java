@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class ShoppingCart {
     private double totalPrice;
-    private static ArrayList<Product> productsInCart;
-    private static ArrayList<Double> productAmounts;
+    private  ArrayList<Product> productsInCart;
+    private  ArrayList<Double> productAmounts;
     private ShoppingCart receiptContent;
 
     public ShoppingCart(double totalPrice) {
@@ -15,12 +15,12 @@ public class ShoppingCart {
         productAmounts = new ArrayList<>();
     }
 
-    public static void addProductToCart(Product product, double amount) {
+    public  void addProductToCart(Product product, double amount) {
         productsInCart.add(product);
         productAmounts.add(amount);
     }
 
-    public static ArrayList<Double> getProductAmounts() {
+    public  ArrayList<Double> getProductAmounts() {
         return productAmounts;
     }
 
@@ -41,7 +41,7 @@ public class ShoppingCart {
         for (int i = 0; i < productsInCart.size(); i++) {
             Product product = productsInCart.get(i);
             double amount = productAmounts.get(i);
-            total += product.getPrice() * amount;
+            total += product.getPrice(amount) * amount;
         }
         return total;
     }

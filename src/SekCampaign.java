@@ -5,6 +5,11 @@ public class SekCampaign implements ProductCampaign{
         return 0;
     }
 
+    @Override
+    public double getSalePercent() {
+        return 0;
+    }
+
     public String getCampaignConditions() {
         return null;
     }
