@@ -1,6 +1,8 @@
 //Robert Tronhage, robert.tronhage@iths.se
 
-//Användare som finns: Användarnamn: admin Lösenord: password
+//Användare som finns:
+// Användarnamn: admin Lösenord: password
+// Användarnamn: oskar Lösenord: oskar
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,7 +15,6 @@ public class Main {
     public static ArrayList<Product> allMushrooms = new ArrayList<>();
     public static ArrayList<Product> allUnassignedProductGroup = new ArrayList<>();
     public static ArrayList<ArrayList<Product>> allProducts = new ArrayList<>();
-
     public static ArrayList<ProductCampaign> allCampaigns = new ArrayList<>();
     public static String[] productGroupArray = {"Frukt", "Grönsaker", "Rotfrukt", "Svamp", "Ingen kategori"};
     public static int productIdTracker = 1;
@@ -28,6 +29,7 @@ public class Main {
         initAllProducts();
         mainMenu();
         System.out.println("Tack för att du använder supervåg 3000,\n hejdååå! :)");
+
     }
 
     private static void initAllProducts() {
@@ -95,7 +97,7 @@ public class Main {
         System.out.print("Ange lösenord: ");
         String userPassword = input.nextLine();
         File fin = new File("users.txt");
-        boolean loggedIn = false; // flagga för att kontrollera om inloggningen är framgångsrik.
+        boolean loggedIn = false; // flagga för att kontrollera om inloggningen är ok.
 
         try (Scanner fileScan = new Scanner(fin)) {
             while (fileScan.hasNextLine()) {
@@ -108,14 +110,13 @@ public class Main {
                 if (userName.equals(splitUserString[1]) && userPassword.equals(splitUserString[2])) {
                     loggedInUser = new User(userId, splitUserString[1], splitUserString[2], admin, active);
                     System.out.print(GREEN);
+                    fileScan.close();
                     loggedInUserMenu();
                     loggedIn = true; // Användaren är inloggad.
 
                     break;
                 }
             }
-
-
             if (!loggedIn) {
                 System.out.println("Felaktigt användarnamn eller lösenord");
             }
@@ -178,11 +179,32 @@ public class Main {
                 case 1 -> addUser();
                 case 2 -> editUserAdminPriv();
                 case 3 -> editUserActive();
-                case 4 -> System.out.println("change password for user");
+                case 4 -> editUserPassword();
                 case 5 -> printAllUsers();
             }
 
         } while (userChoice != 6);
+    }
+    public static void editUserPassword(){
+        User foundUser = findUserById();
+        if (foundUser == null) {
+            return;
+        }
+
+        System.out.println("välj nedan:\n" +
+                "1 - Ändra Lösenordet för användaren\n" +
+                "2 - Avbryt och åter redigeringsmeny");
+
+        int userChoice = getValidIntegerInput(input, 1, 2);
+
+        if (userChoice == 1) {
+            System.out.println("Ange nytt lösenord (notera att du inte kan använda tecknet ':'): ");
+            String newUserPassword = input.nextLine();
+            foundUser.setPassword(newUserPassword);
+            foundUser.updateUserToFile();
+        } else if (userChoice == 2) {
+            System.out.println("Avbryter.. Lösenordet ändras INTE");
+        }
     }
 
     public static User findUserById() {
@@ -209,12 +231,15 @@ public class Main {
                     foundUser = new User(userId, userName, password, active, admin);
                 }
             }
+            fileScan.close();
             if (foundUser == null) {
                 System.out.println("användaren hittades inte");
             }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
 
         return foundUser;
     }
@@ -235,9 +260,11 @@ public class Main {
 
         if (userChoice == 1) {
             foundUser.setUserAdmin(true);
+            foundUser.updateUserToFile();
         } else if (userChoice == 2) {
             foundUser.setUserAdmin(false);
         }
+
 
         System.out.println("det funkade! " + foundUser.getUserName() + " har nu " + (foundUser.isUserAdmin() ? "Adminrättigheter" : "INTE Adminrättigheter"));
     }
@@ -261,9 +288,10 @@ public class Main {
         } else if (userChoice == 2) {
             foundUser.setUserActive(false);
         }
+        foundUser.updateUserToFile();
 
         System.out.println("användaren: " + foundUser.getUserName() + (foundUser.isUserActive() ? " har Aktiverats..." : " har inaktiverats..."));
-//        User.editUserActiveToFile();
+//
     }
 
     public static void printAllUsers() {
@@ -315,7 +343,7 @@ public class Main {
         User newUser = new User(userPassword, userName, isAdmin);
         System.out.println("Användare: " + userName + " har skapats");
         System.out.println(newUser);
-        User.addNewUserToFile(newUser);
+        newUser.addNewUserToFile();
 
     }
 
@@ -602,7 +630,7 @@ public class Main {
                 double amount = shoppingCart.getProductAmounts().get(i);
                 String priceUnit = product.isUnitPriceByWeight() ? "per kilo" : "per styck";
                 String amountSuffix = product.isUnitPriceByWeight() ? "kg, " : "st, ";
-                System.out.println("Produkt: " + product.getName() + ", " + amount + amountSuffix +
+                System.out.println(i + 1 +" Produkt: " + product.getName() + ", " + amount + amountSuffix +
                         "Pris " + priceUnit + ": " + String.format("%.2f", product.getPrice(amount)) + " SEK, Total: " + String.format("%.2f", (amount * product.getPrice(amount))));
             }
 
@@ -617,7 +645,6 @@ public class Main {
 
             switch (userChoice) {
                 case 1 -> {
-                    Receipt receipt = new Receipt();
                     Receipt.generateReceipt(shoppingCart);
                     shoppingCart.getAllProductsInCart().clear();
                     shoppingCart.getProductAmounts().clear();
@@ -804,7 +831,7 @@ public class Main {
                     int campaignCondition = product.getCampaignCondition();
 
                     System.out.println("Produkt: " + product.getName() + ", Ordinarie pris: " + originalPrice + " SEK " +
-                            "Kampanjpris: " + String.format("%.2f", discountedPrice) + " SEK " + "Villkor för kampanj: " + campaignCondition);
+                            "Kampanjpris: " + String.format("%.2f", discountedPrice) + " SEK " + "Villkor för kampanj: Köp minst " + campaignCondition + (product.isUnitPriceByWeight() ? "kg ":" stycken "));
                 }
             }
         }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+//TODO TOT ANTAL VAROR PÅ KVITTOT!
+
 public class Receipt {
 
     public static void generateReceipt(ShoppingCart cart) {
@@ -12,7 +14,9 @@ public class Receipt {
         String receiptContent = "Kvitto No: " + dateFormat.format(date) + "\n\n\n" +
                                 "Antal\t\t\tProdukt\t\t\tTot\n" +
                                 generateProductAmountInReceipt(cart)+
-                                "\n\n\nTotalt pris: " + String.format("%2f", cart.getTotalPrice()) + " SEK\n";
+                                "\n\n\nTot Antal (Styck): "+ cart.getProductTotAmountInPcs() +
+                                "\nTot Antal (kg): " + cart.getProductTotAmountInKg()+ "\nTotalt pris: " +
+                                String.format("%.2f", cart.getTotalPrice()) + " SEK\n";
 
         // Visa kvitto på konsolen
         System.out.println(receiptContent);

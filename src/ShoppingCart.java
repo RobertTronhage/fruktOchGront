@@ -1,13 +1,12 @@
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ShoppingCart {
     private double totalPrice;
     private  ArrayList<Product> productsInCart;
     private  ArrayList<Double> productAmounts;
-    private ShoppingCart receiptContent;
+
+    private int productTotAmount;
 
     public ShoppingCart(double totalPrice) {
         this.totalPrice = totalPrice;
@@ -20,6 +19,30 @@ public class ShoppingCart {
         productAmounts.add(amount);
     }
 
+    public double getProductTotAmountInPcs() {
+        double productTotAmountInPcs=0;
+        for (int i = 0; i<productsInCart.size();i++) {
+            Product product = productsInCart.get(i);
+            if (!product.isUnitPriceByWeight()){
+                productTotAmountInPcs += productAmounts.get(i);
+            }
+
+        }
+        return productTotAmountInPcs;
+    }
+
+    public double getProductTotAmountInKg() {
+        double productTotAmountInKg=0;
+        for (int i = 0; i<productsInCart.size();i++) {
+            Product product = productsInCart.get(i);
+            if (product.isUnitPriceByWeight()){
+                productTotAmountInKg += productAmounts.get(i);
+            }
+
+        }
+        return productTotAmountInKg;
+    }
+
     public  ArrayList<Double> getProductAmounts() {
         return productAmounts;
     }
@@ -28,22 +51,15 @@ public class ShoppingCart {
         return productsInCart.size();
     }
 
-    public ShoppingCart getReceiptContent() {
-        return receiptContent;
-    }
-
-//    public static int isCampaignConditionMet(){
-//
-//    }
 
     public double getTotalPrice() {
-        double total = 0.0;
+        double totalPriceOfShoppingCart = 0.0;
         for (int i = 0; i < productsInCart.size(); i++) {
             Product product = productsInCart.get(i);
             double amount = productAmounts.get(i);
-            total += product.getPrice(amount) * amount;
+            totalPriceOfShoppingCart += product.getPrice(amount) * amount;
         }
-        return total;
+        return totalPriceOfShoppingCart;
     }
 
     public ArrayList<Product> getAllProductsInCart() {
