@@ -1,5 +1,5 @@
 1:admin:password:1:1
-2:a:aaa:1:0
+2:a:a:1:0
 3:robert:robert:1:0
 4:ok:ok:1:0
 5:asd:asd:1:1

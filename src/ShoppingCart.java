@@ -1,5 +1,10 @@
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ShoppingCart {
     private double totalPrice;
@@ -51,7 +56,6 @@ public class ShoppingCart {
         return productsInCart.size();
     }
 
-
     public double getTotalPrice() {
         double totalPriceOfShoppingCart = 0.0;
         for (int i = 0; i < productsInCart.size(); i++) {
@@ -65,6 +69,7 @@ public class ShoppingCart {
     public ArrayList<Product> getAllProductsInCart() {
         return productsInCart;
     }
+
 
     @Override
     public String toString() {

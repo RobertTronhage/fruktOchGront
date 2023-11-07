@@ -108,7 +108,6 @@ public class User {
             BufferedWriter writer = new BufferedWriter(new FileWriter("temp_users.txt"));
 
 
-
             String userLine;
             boolean isUpdated = false;
 
@@ -127,21 +126,15 @@ public class User {
             reader.close();
             writer.close();
 
-//            if (isUpdated){
-//                replaceUserFile();
-//            }
-
             if (file.delete()) {
-                System.out.println("Deleted the file: " + file.getName());
             } else {
                 System.out.println("HE GÅR IT!!!!!");
             }
 
             if (isUpdated) {
                 if (new File("temp_users.txt").renameTo(file)) {
-                    System.out.println("Updated the file: " + file.getName());
                 } else {
-                    System.out.println("jahsbdjahsbdjahbsd.");
+                    System.out.println("FEEEEEEEEEL.");
                 }
             }
 
