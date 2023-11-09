@@ -11,7 +11,6 @@ public class ShoppingCart {
     private  ArrayList<Product> productsInCart;
     private  ArrayList<Double> productAmounts;
 
-    private int productTotAmount;
 
     public ShoppingCart(double totalPrice) {
         this.totalPrice = totalPrice;
@@ -31,7 +30,6 @@ public class ShoppingCart {
             if (!product.isUnitPriceByWeight()){
                 productTotAmountInPcs += productAmounts.get(i);
             }
-
         }
         return productTotAmountInPcs;
     }
@@ -43,7 +41,6 @@ public class ShoppingCart {
             if (product.isUnitPriceByWeight()){
                 productTotAmountInKg += productAmounts.get(i);
             }
-
         }
         return productTotAmountInKg;
     }
@@ -69,7 +66,6 @@ public class ShoppingCart {
     public ArrayList<Product> getAllProductsInCart() {
         return productsInCart;
     }
-
 
     @Override
     public String toString() {

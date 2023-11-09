@@ -128,13 +128,13 @@ public class User {
 
             if (file.delete()) {
             } else {
-                System.out.println("HE GÅR IT!!!!!");
+                System.out.println("HE GÅR IT ATT TA BORT FILHELVETET!");
             }
 
             if (isUpdated) {
                 if (new File("temp_users.txt").renameTo(file)) {
                 } else {
-                    System.out.println("FEEEEEEEEEL.");
+                    System.out.println("Det gick inte att byta namn på filen.");
                 }
             }
 

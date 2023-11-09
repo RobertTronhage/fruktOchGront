@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -24,6 +21,16 @@ public class PercentCampaign implements ProductCampaign {
     public String getCampaignName() {
         return campaignName;
     }
+
+    @Override
+    public String setCampaignName() {
+        return campaignName;
+    }
+
+    public void setSalePercent(double salePercent) {
+        this.salePercent = salePercent;
+    }
+
 
     @Override
     public double calculateCampaignPrice(double price) {
@@ -62,6 +69,127 @@ public class PercentCampaign implements ProductCampaign {
             System.out.println("he gick inte!");
         }
     }
+    public static void updatedCampaignToFile() {
+//        try {
+//            File file = new File();
+//            File tempFile = new File("temp_users.txt");
+//            BufferedReader reader = new BufferedReader(new FileReader(file));
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("temp_users.txt"));
+//
+//
+//            String userLine;
+//            boolean isUpdated = false;
+//
+//            while ((userLine = reader.readLine()) != null) {
+//                String[] splitUserString = userLine.split(":");
+//                int userId = Integer.parseInt(splitUserString[0]);
+//
+//                if (getUserId() == userId) {
+//                    userLine = getUserId() + ":" + userName + ":" + password + ":" +
+//                            (isUserActive ? "1" : "0") + ":" + (isUserAdmin ? "1" : "0");
+//                    isUpdated = true;
+//                }
+//                writer.write(userLine + "\n");
+//            }
+//
+//            reader.close();
+//            writer.close();
+//
+//            if (file.delete()) {
+//            } else {
+//                System.out.println("HE GÅR IT!!!!!");
+//            }
+//
+//            if (isUpdated) {
+//                if (new File("temp_users.txt").renameTo(file)) {
+//                } else {
+//                    System.out.println("FEEEEEEEEEL.");
+//                }
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+        }
+
+
+    public static void saveCampaignOnProductToFile(Product foundProduct,ProductCampaign foundCampaign) {
+        File directory = new File("Kampanj_Produkter");
+        if (!directory.exists()) {
+            if (directory.mkdirs()) {
+                System.out.println("Mappen 'Kampanj_Produkter' har skapats.");
+            } else {
+                System.out.println("Kunde inte skapa mappen 'Kampanj_Produkter'.");
+            }
+        }
+        try {
+            String productLine =foundCampaign.getCampaignName()+":"+
+                    foundProduct.getCampaignCondition() +":"+foundProduct.getProductId()+ "\n";
+            String fileName = "Kampanj_Produkter/Kampanj_Produkter.txt";
+            FileWriter fileWriter = new FileWriter(fileName, true);
+            fileWriter.write(productLine);
+            fileWriter.close();
+            System.out.println("Kampanjdokument har skapats, du hittar det i mappen 'Produkter' i roten på projektet...");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("he gick inte!");
+        }
+    }
+//    public static void removeCampaignOnProductFile(){
+//        File directory = new File("Kampanj_Produkter");
+//        if (!directory.exists()) {
+//            if (directory.mkdirs()) {
+//                System.out.println("Mappen 'Kampanj_Produkter' har skapats.");
+//            } else {
+//                System.out.println("Kunde inte skapa mappen 'Kampanj_Produkter'.");
+//            }
+//        }
+//        try {
+//            String productLine =foundCampaign.getCampaignName()+":"+
+//                    foundProduct.getCampaignCondition() +":"+foundProduct.getProductId()+ "\n";
+//            String fileName = "Kampanj_Produkter/Kampanj_Produkter.txt";
+//            FileWriter fileWriter = new FileWriter(fileName, true);
+//            fileWriter.write(productLine);
+//            fileWriter.close();
+//            System.out.println("Kampanjdokument har skapats, du hittar det i mappen 'Produkter' i roten på projektet...");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.out.println("he gick inte!");
+//        }
+//    }
+
+    public static void initCampaignOnProducts() {
+        File productCampaignDirectory = new File("Kampanj_Produkter");
+
+        if (!productCampaignDirectory.exists() || !productCampaignDirectory.isDirectory()) {
+            System.out.println("hittar it kampanjmappen!");
+            return;
+        }
+        File fin = new File("Kampanj_Produkter/Kampanj_Produkter.txt");
+
+        try (Scanner fileScan = new Scanner(fin)) {
+            while (fileScan.hasNextLine()) {
+                String productString = fileScan.nextLine();
+                String[] splitProductString = productString.split(":");
+                String campaignName = splitProductString[0];
+                int condition = Integer.parseInt(splitProductString[1]);
+                int productId = Integer.parseInt(splitProductString[2]);
+                Product product = Main.searchByProductId(productId);
+
+                for (int i = 0; i < Main.allCampaigns.size(); i++) {
+                    if (Main.allCampaigns.get(i).getCampaignName().equals(campaignName)){
+                        assert product != null;
+                        product.setProductCampaign(Main.allCampaigns.get(i));
+                        product.setcampaignCondition(condition);
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+
+
+    }
 
     public static void initCampaigns() {
         File campaignDirectory = new File("Kampanjer");
@@ -73,7 +201,6 @@ public class PercentCampaign implements ProductCampaign {
 
         File[] fileArray = campaignDirectory.listFiles();
 
-        assert fileArray != null;
 
         for (File f : fileArray) {
             if (f.getName().endsWith(".txt")) {

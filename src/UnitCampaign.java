@@ -1,4 +1,4 @@
-public class SekCampaign implements ProductCampaign{
+public class UnitCampaign implements ProductCampaign{
 
     @Override
     public double calculateCampaignPrice(double price) {
@@ -9,6 +9,7 @@ public class SekCampaign implements ProductCampaign{
     public double getSalePercent() {
         return 0;
     }
+
 
     public String getCampaignConditions() {
         return null;
@@ -23,6 +24,15 @@ public class SekCampaign implements ProductCampaign{
         return campaignName;
     }
 
+    @Override
+    public String setCampaignName() {
+        return null;
+    }
+
+    @Override
+    public void setSalePercent(double newSaleValue) {
+
+    }
 
 
 }
