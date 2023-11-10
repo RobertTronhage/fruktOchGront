@@ -168,7 +168,7 @@ public class Main {
                 case 3 -> editProduct();
                 case 4 -> removeProduct();
                 case 5 -> calculatePriceOfProducts();
-                case 6 -> CampaignOnProducts();
+                case 6 -> campaignsMenu();
                 case 7 -> editUsers();
             }
         } while (menuOption != 8);
@@ -371,7 +371,11 @@ public class Main {
         return userInput;
     }
 
+
+    //Åtgärdat från labb 1! Nu kan man ta in både ',' samt '.' som input!
     public static double getValidDoubleInput(Scanner input, double minValue) {
+
+
         double userInput = 0.0;
         boolean isUserInputInvalid;
 
@@ -539,7 +543,6 @@ public class Main {
     }
 
     public static Product searchByProductId(int productId) {
-
 
         Product foundProduct = null;
 
@@ -823,7 +826,7 @@ public class Main {
         }
     }
 
-    private static void CampaignOnProducts() {
+    private static void campaignsMenu() {
         int userinput;
         System.out.println("Vad vill du göra?\n" +
                 "1 - Skapa en ny kampanj\n" +
@@ -843,7 +846,7 @@ public class Main {
             case 3 -> editCampaign();
             case 4 -> editCampaignOnProduct();
             case 5 -> setCampaignOnProduct();
-            //case 6 -> removeCampaignOnProduct();
+            case 6 -> removeCampaignOnProduct();
             case 7 -> removeCampaign();
         }
     }
@@ -858,11 +861,12 @@ public class Main {
                     double discountedPrice = product.getPrice();
                     int campaignCondition = product.getCampaignCondition();
 
-                    System.out.println("Produkt: " + product.getName() + ", Ordinarie pris: " + originalPrice + " SEK " +
+                    System.out.println("ProduktID: " + product.getProductId() +", Produkt: " + product.getName() + ", Ordinarie pris: " + originalPrice + " SEK " +
                             "Kampanjpris: " + String.format("%.2f", discountedPrice) + " SEK " + "Villkor för kampanj: Köp minst " + campaignCondition + (product.isUnitPriceByWeight() ? "kg " : " stycken "));
                 }
             }
         }
+
     }
 
     private static void createNewCampaign() {
@@ -890,7 +894,6 @@ public class Main {
         ProductCampaign foundCampaign = allCampaigns.get(userChoice - 1);
         return foundCampaign;
     }
-
     private static void editCampaign() {
         String newCampaignName;
         double newSaleValue = 0;
@@ -914,20 +917,20 @@ public class Main {
             //just nu kan denna metod bara hantera %kampanjer
 
         } else if (userInput == 2) {
-            double oldSaleValue = foundCampaign.getSalePercent();
+            System.out.println("Ange hur mycket rabatt kampanjen ska ha i % :");
+            newSaleValue=getValidDoubleInput(input,0);
+            String oldCampaignName = foundCampaign.getCampaignName();
             foundCampaign.setSalePercent(newSaleValue);
-            //PercentCampaign.updatedCampaignToFile();
+            PercentCampaign.updatedCampaignToFile(currentPath,foundCampaign,oldCampaignName);
             //om man nu ska köra enl. strategy-pattern så kanske det är rimligare att anropa ProductCampaign.updatedCampaignToFile???????
             //just nu kan denna metod bara hantera %kampanjer
         }
     }
-
     private static void removeCampaign(){
         ProductCampaign foundCampaign = getProductCampaign("ange vilken Kampanj du vill ta bort");
         allCampaigns.remove(foundCampaign);
         PercentCampaign.removeCampaignFile(currentPath, foundCampaign.getCampaignName());
     }
-
     private static void setCampaignOnProduct() {
         System.out.println("ange produktID (PLU) på produkten:");
         int userInput = getValidIntegerInput(input, 1, Integer.MAX_VALUE);
@@ -949,10 +952,42 @@ public class Main {
     }
     private static void editCampaignOnProduct(){
 
+        //KampanjNAMN,VILLKOR,PRODUKTID
+
+        printCampaigns();
+
+        System.out.println("ange produktID (PLU) på Kampanjprodukten du vill ta bort:");
+        int userInput = getValidIntegerInput(input, 1, Integer.MAX_VALUE);
+        Product foundProduct = searchByProductId(userInput);
+        if (foundProduct == null) {
+            return;
+        }
+
+        System.out.println("Ange hur många enheter (kg/styck) kund måste köpa för att rabatten ska gälla:");
+        foundProduct.setcampaignCondition(getValidIntegerInput(input, 1, Integer.MAX_VALUE));
+        PercentCampaign.editCampaignOnProductFile(currentPath, foundProduct,foundProduct.getProductCampaign());
+
     }
+
+
     private static void removeCampaignOnProduct() {
+        printCampaigns();
 
+        System.out.println("ange produktID (PLU) på produkten:");
+        int userInput = getValidIntegerInput(input, 1, Integer.MAX_VALUE);
+        Product foundProduct = searchByProductId(userInput);
+        if (foundProduct == null) {
+            return;
+        }
+        for (ArrayList<> productGroup : allCampaigns) {
+            for (int i = 0; i < productGroup.size(); i++) {
+                if (productGroup.contains(foundProduct)) {
+                    productGroup.remove(foundProduct);
+                }
+            }
+        }
 
+        PercentCampaign.removeCampaignOnProductFromFile( currentPath, foundProduct);
     }
 
 

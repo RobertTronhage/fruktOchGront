@@ -31,7 +31,6 @@ public class PercentCampaign implements ProductCampaign {
         this.salePercent = salePercent;
     }
 
-
     @Override
     public double calculateCampaignPrice(double price) {
         double saleInDecimal = salePercent / 100;
@@ -39,8 +38,7 @@ public class PercentCampaign implements ProductCampaign {
         return price * remainingMultiplier;
     }
 
-
-    public static void saveCampaignToFile(String currentPath,double salePercent, String campaignName) {
+    public static void saveCampaignToFile(String currentPath, double salePercent, String campaignName) {
         File directory = new File(currentPath + "\\Kampanjer");
         if (!directory.exists()) {
             if (directory.mkdirs()) {
@@ -63,14 +61,14 @@ public class PercentCampaign implements ProductCampaign {
         }
     }
 
-    public static void updatedCampaignToFile(String currentPath,ProductCampaign productCampaign,String oldCampaignName) {
-        saveCampaignToFile(currentPath, productCampaign.getSalePercent(), productCampaign.getCampaignName());
+    public static void updatedCampaignToFile(String currentPath, ProductCampaign productCampaign, String oldCampaignName) {
         removeCampaignFile(currentPath, oldCampaignName);
+        saveCampaignToFile(currentPath, productCampaign.getSalePercent(), productCampaign.getCampaignName());
+
     }
 
-
     public static void saveCampaignOnProductToFile(String currentPath, Product foundProduct, ProductCampaign foundCampaign) {
-        File directory = new File(currentPath +"\\Kampanj_Produkter");
+        File directory = new File(currentPath + "\\Kampanj_Produkter");
         if (!directory.exists()) {
             if (directory.mkdirs()) {
                 System.out.println("Mappen 'Kampanj_Produkter' har skapats.");
@@ -81,7 +79,8 @@ public class PercentCampaign implements ProductCampaign {
         try {
             String productLine = foundCampaign.getCampaignName() + ":" +
                     foundProduct.getCampaignCondition() + ":" + foundProduct.getProductId() + "\n";
-            String fileName = currentPath+"/Kampanj_Produkter/Kampanj_Produkter.txt";
+
+            String fileName = currentPath + "/Kampanj_Produkter/Kampanj_Produkter.txt";
             FileWriter fileWriter = new FileWriter(fileName, true);
             fileWriter.write(productLine);
             fileWriter.close();
@@ -92,35 +91,97 @@ public class PercentCampaign implements ProductCampaign {
         }
     }
 
-    public static void removeCampaignFile(String currentPath, String campaignName){
-        File file = new File(currentPath+"\\Kampanjer\\Kampanj_" + campaignName + ".txt");
+    public static void removeCampaignFile(String currentPath, String campaignName) {
+        File file = new File(currentPath + "\\Kampanjer\\Kampanj_" + campaignName + ".txt");
 
         if (file.delete()) {
         } else {
             System.out.println("HE GÅR IT ATT TA BORT FILHELVETET!");
         }
     }
-    public static void removeCampaignOnProductFile(){
-//        File directory = new File("Kampanj_Produkter");
-//        if (!directory.exists()) {
-//            if (directory.mkdirs()) {
-//                System.out.println("Mappen 'Kampanj_Produkter' har skapats.");
-//            } else {
-//                System.out.println("Kunde inte skapa mappen 'Kampanj_Produkter'.");
-//            }
-//        }
-//        try {
-//            String productLine =foundCampaign.getCampaignName()+":"+
-//                    foundProduct.getCampaignCondition() +":"+foundProduct.getProductId()+ "\n";
-//            String fileName = "Kampanj_Produkter/Kampanj_Produkter.txt";
-//            FileWriter fileWriter = new FileWriter(fileName, true);
-//            fileWriter.write(productLine);
-//            fileWriter.close();
-//            System.out.println("Kampanjdokument har skapats, du hittar det i mappen 'Produkter' i roten på projektet...");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.out.println("he gick inte!");
-//        }
+
+    public static void editCampaignOnProductFile(String currentPath, Product foundProduct, ProductCampaign foundCampaign) {
+        try {
+            File file = new File(currentPath + "\\Kampanj_Produkter\\Kampanj_Produkter.txt");
+            File tempFile = new File(currentPath + "\\Kampanj_Produkter\\temp_Kampanj_Produkter.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(currentPath + "/Kampanj_Produkter/temp_Kampanj_Produkter.txt"));
+
+            String productLine;
+            boolean isUpdated = false;
+            int productId = foundProduct.getProductId();
+
+            while ((productLine = reader.readLine()) != null) {
+                String[] splitProductLine = productLine.split(":");
+                int productIdFromFile = Integer.parseInt(splitProductLine[2]);
+
+                if (productId == productIdFromFile) {
+                    productLine = foundCampaign.getCampaignName() + ":" +
+                            foundProduct.getCampaignCondition() + ":" + foundProduct.getProductId() + "\n";
+                    isUpdated = true;
+                }
+                writer.write((productLine));
+            }
+
+            reader.close();
+            writer.close();
+
+            if (file.delete()) {
+            } else {
+                System.out.println("HE GÅR IT!!!!!");
+            }
+
+            if (isUpdated) {
+                if (tempFile.renameTo(file)) {
+                    System.out.println("Nu är filen uppdaterad!");
+                } else {
+                    System.out.println("Det gick inte att uppdatera filen...");
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeCampaignOnProductFromFile(String currentPath, Product foundProduct) {
+        try {
+            File file = new File(currentPath + "\\Kampanj_Produkter\\Kampanj_Produkter.txt");
+            File tempFile = new File(currentPath + "\\Kampanj_Produkter\\temp_Kampanj_Produkter.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String productLine;
+
+            while ((productLine = reader.readLine()) != null) {
+                String[] splitProductLine = productLine.split(":");
+                int productIdFromFile = Integer.parseInt(splitProductLine[2]);
+
+                // Om det inte är raden du vill ta bort, skriv den till den temporära filen
+                if (foundProduct.getProductId() != productIdFromFile) {
+                    writer.write(productLine + "\n");
+                }
+            }
+
+            reader.close();
+            writer.close();
+
+
+            if (file.delete()) {
+
+                if (tempFile.renameTo(file)) {
+                    System.out.println("Kampanjprodukten borttagen!");
+                } else {
+                    System.out.println("Det gick inte att byta namn på den temporära filen.");
+                }
+            } else {
+                System.out.println("Det gick inte att ta bort den ursprungliga filen.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void initCampaignOnProducts(String currentPath) {
@@ -144,7 +205,7 @@ public class PercentCampaign implements ProductCampaign {
 
                 for (int i = 0; i < Main.allCampaigns.size(); i++) {
                     if (Main.allCampaigns.get(i).getCampaignName().equals(campaignName)) {
-                        if (product==null){
+                        if (product == null) {
                             return;
                         }
                         product.setProductCampaign(Main.allCampaigns.get(i));
@@ -161,7 +222,7 @@ public class PercentCampaign implements ProductCampaign {
     }
 
     public static void initCampaigns(String currentPath) {
-        File campaignDirectory = new File(currentPath+"/Kampanjer");
+        File campaignDirectory = new File(currentPath + "/Kampanjer");
 
         if (!campaignDirectory.exists() || !campaignDirectory.isDirectory()) {
             System.out.println("hittar it kampanjmappen!");
