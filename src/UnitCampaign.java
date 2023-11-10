@@ -1,3 +1,6 @@
+//Robert Tronhage, robert.tronhage@iths.se
+//hann inte med att göra denna klass...
+
 public class UnitCampaign implements ProductCampaign{
 
     @Override

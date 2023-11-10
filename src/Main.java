@@ -28,7 +28,6 @@ public class Main {
     static ShoppingCart shoppingCart;
     public static String currentPath;
 
-
     public static void main(String[] args) {
 
         initFromFile();
@@ -74,17 +73,17 @@ public class Main {
         } while (menuOption != 6);
     }
 
-    public static void initCurrentPath(){
+    public static void initCurrentPath() {
         Console console = System.console();
         try {
             currentPath = new File(".").getCanonicalPath();
 
-            if (console!=null) {
-                currentPath = currentPath.substring(0,currentPath.length()-4);
+            if (console != null) {
+                currentPath = currentPath.substring(0, currentPath.length() - 4);
 
             }
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -109,7 +108,7 @@ public class Main {
             char[] passwordChars = console.readPassword("Ange lösenord: ");
             userPassword = new String(passwordChars);
             //root is src in console, file is not in src.
-            currentPath = currentPath.substring(0,currentPath.length()-4);
+            currentPath = currentPath.substring(0, currentPath.length() - 4);
             fin = new File(currentPath + "/users.txt");
         }
 
@@ -135,7 +134,7 @@ public class Main {
 
             if (!loggedIn) {
                 System.out.println("Felaktigt användarnamn eller lösenord\nOm felet kvarstår, kontakta helpdesk: 070-58 26 773");
-            }else {
+            } else {
                 fileScan.close();
                 loggedInUserMenu();
             }
@@ -330,11 +329,11 @@ public class Main {
 
     public static void addUser() {
 
-            System.out.println("Ange användarnamn för den nya användaren:");
-            String userName = getValidStringInput(input);
+        System.out.println("Ange användarnamn för den nya användaren:");
+        String userName = getValidStringInput(input);
 
-            System.out.println("Ange lösenord för den nya användaren:");
-            String userPassword = getValidStringInput(input);
+        System.out.println("Ange lösenord för den nya användaren:");
+        String userPassword = getValidStringInput(input);
 
         System.out.println("ska den nya användaren ha Admin rättigheter?\n" +
                 "1 - Ja\n" +
@@ -371,7 +370,6 @@ public class Main {
         return userInput;
     }
 
-
     //Åtgärdat från labb 1! Nu kan man ta in både ',' samt '.' som input!
     public static double getValidDoubleInput(Scanner input, double minValue) {
 
@@ -398,23 +396,22 @@ public class Main {
 
         return userInput;
     }
-    public static String getValidStringInput(Scanner input){
+
+    public static String getValidStringInput(Scanner input) {
         String userInput;
         boolean isUserInputInvalid;
 
-        //TODO vänd på if statement så du tar A-Z som gött!
-
         do {
-                userInput = input.nextLine();
-                if (userInput.contains(":")) {
-                    System.out.println("Felaktig inmatning, du kan inte inkludera tecknet ':'");
-                    isUserInputInvalid = true;
-                } else if (userInput.isEmpty()) {
-                    System.out.println("du måste ange minst en bokstav..");
-                    isUserInputInvalid = true;
-                }else{
-                    isUserInputInvalid = false;
-                }
+            userInput = input.nextLine();
+            if (!userInput.matches("[a-zA-ZåäöÅÄÖ0-9]")) {
+                System.out.println("Felaktig inmatning, du kan inte använda specialtecken!");
+                isUserInputInvalid = true;
+            } else if (userInput.isEmpty()) {
+                System.out.println("du måste ange minst en bokstav..");
+                isUserInputInvalid = true;
+            } else {
+                isUserInputInvalid = false;
+            }
 
 
         } while (isUserInputInvalid);
@@ -436,7 +433,6 @@ public class Main {
         System.out.println("Lägg till pris på produkten:");
 
         double productPrice = getValidDoubleInput(input, 0);
-
 
 
         Product newProduct = new Product(productName, productGroup, productPrice, unitPriceByWeight);
@@ -461,8 +457,8 @@ public class Main {
 
     private static String setProductName() {
 
-            System.out.println("Ange namn på produkten: ");
-            String productName = getValidStringInput(input);
+        System.out.println("Ange namn på produkten: ");
+        String productName = getValidStringInput(input);
 
         return productName;
     }
@@ -504,10 +500,11 @@ public class Main {
             switch (userChoice) {
                 case 1 -> freeTextSearch();
                 case 2 -> searchByCategory();
-                case 3 -> {System.out.println("ange produktID (PLU) på produkten:");
+                case 3 -> {
+                    System.out.println("ange produktID (PLU) på produkten:");
                     int userInput = getValidIntegerInput(input, 1, Integer.MAX_VALUE);
                     Product foundProduct = searchByProductId(userInput);
-                    if (foundProduct!=null){
+                    if (foundProduct != null) {
                         System.out.println(foundProduct);
                     }
 
@@ -609,7 +606,7 @@ public class Main {
 
         if (foundProduct == null) {
             return;
-        }else{
+        } else {
             System.out.println(foundProduct);
         }
 
@@ -706,7 +703,7 @@ public class Main {
         Product foundProduct = searchByProductId(userInput);
         if (foundProduct == null) {
             return;
-        }else{
+        } else {
             System.out.println(foundProduct);
         }
         do {
@@ -727,7 +724,7 @@ public class Main {
                 }
                 case 2 -> {
                     System.out.println("Ange nytt pris på produkten: ");
-                    double newPrice = getValidDoubleInput(input,0);
+                    double newPrice = getValidDoubleInput(input, 0);
                     foundProduct.setPrice(newPrice);
                     System.out.println("Nytt pris är: " + String.format("%.2f", newPrice) + " SEK\n");
                     foundProduct.updateProductToFile();
@@ -801,7 +798,7 @@ public class Main {
         Product foundProduct = searchByProductId(userInput);
         if (foundProduct == null) {
             return;
-        }else{
+        } else {
             System.out.println(foundProduct);
         }
 
@@ -828,31 +825,36 @@ public class Main {
 
     private static void campaignsMenu() {
         int userinput;
-        System.out.println("Vad vill du göra?\n" +
-                "1 - Skapa en ny kampanj\n" +
-                "2 - Visa alla Aktiva kampanjer\n"+
-                "3 - Ändra kampanj\n" +
-                "4 - Ändra en kampanj på produkt\n" +
-                "5 - Lägga till kampanj på produkt\n" +
-                "6 - Ta bort kampanj från produkt\n" +
-                "7 - Ta bort en kampanj\n" +
-                "8 - Åter till personalmeny");
+        do {
 
-        userinput = getValidIntegerInput(input, 1, 8);
 
-        switch (userinput) {
-            case 1 -> createNewCampaign();
-            case 2 -> printCampaigns();
-            case 3 -> editCampaign();
-            case 4 -> editCampaignOnProduct();
-            case 5 -> setCampaignOnProduct();
-            case 6 -> removeCampaignOnProduct();
-            case 7 -> removeCampaign();
-        }
+            System.out.println("Vad vill du göra?\n" +
+                    "1 - Skapa en ny kampanj\n" +
+                    "2 - Visa alla Aktiva kampanjer\n" +
+                    "3 - Ändra kampanj\n" +
+                    "4 - Ändra en kampanj på produkt\n" +
+                    "5 - Lägga till kampanj på produkt\n" +
+                    "6 - Ta bort kampanj från produkt\n" +
+                    "7 - Ta bort en kampanj\n" +
+                    "8 - Åter till personalmeny");
+
+            userinput = getValidIntegerInput(input, 1, 8);
+
+            switch (userinput) {
+                case 1 -> createNewCampaign();
+                case 2 -> printCampaigns();
+                case 3 -> editCampaign();
+                case 4 -> editCampaignOnProduct();
+                case 5 -> setCampaignOnProduct();
+                case 6 -> removeCampaignOnProduct();
+                case 7 -> removeCampaign();
+            }
+        } while (userinput != 8);
     }
 
     private static void printCampaigns() {
         System.out.println("Aktuella kampanjer: ");
+        int foundCampaignOnProductsCounter = 0;
 
         for (ArrayList<Product> productGroup : allProducts) {
             for (Product product : productGroup) {
@@ -860,13 +862,16 @@ public class Main {
                     double originalPrice = product.getRegularPrice();
                     double discountedPrice = product.getPrice();
                     int campaignCondition = product.getCampaignCondition();
+                    foundCampaignOnProductsCounter++;
 
-                    System.out.println("ProduktID: " + product.getProductId() +", Produkt: " + product.getName() + ", Ordinarie pris: " + originalPrice + " SEK " +
+                    System.out.println("ProduktID: " + product.getProductId() + ", Produkt: " + product.getName() + ", Ordinarie pris: " + originalPrice + " SEK " +
                             "Kampanjpris: " + String.format("%.2f", discountedPrice) + " SEK " + "Villkor för kampanj: Köp minst " + campaignCondition + (product.isUnitPriceByWeight() ? "kg " : " stycken "));
                 }
             }
         }
-
+        if (foundCampaignOnProductsCounter == 0) {
+            System.out.println("hittade inga aktuella kampanjer");
+        }
     }
 
     private static void createNewCampaign() {
@@ -884,6 +889,7 @@ public class Main {
         allCampaigns.add(percentCampaign);
         PercentCampaign.saveCampaignToFile(currentPath, campaignInPercent, nameOfCampaign);
     }
+
     private static ProductCampaign getProductCampaign(String reasonForSearch) {
         System.out.println(reasonForSearch);
         for (int i = 0; i < allCampaigns.size(); i++) {
@@ -894,6 +900,7 @@ public class Main {
         ProductCampaign foundCampaign = allCampaigns.get(userChoice - 1);
         return foundCampaign;
     }
+
     private static void editCampaign() {
         String newCampaignName;
         double newSaleValue = 0;
@@ -912,45 +919,47 @@ public class Main {
             newCampaignName = getValidStringInput(input);
             String oldCampaignName = foundCampaign.getCampaignName();
             foundCampaign.setCampaignName(newCampaignName);
-            PercentCampaign.updatedCampaignToFile(currentPath, foundCampaign,oldCampaignName);
+            PercentCampaign.updatedCampaignToFile(currentPath, foundCampaign, oldCampaignName);
             //om man nu ska köra enl. strategy-pattern så kanske det är rimligare att anropa ProductCampaign.updatedCampaignToFile???????
             //just nu kan denna metod bara hantera %kampanjer
 
         } else if (userInput == 2) {
             System.out.println("Ange hur mycket rabatt kampanjen ska ha i % :");
-            newSaleValue=getValidDoubleInput(input,0);
+            newSaleValue = getValidDoubleInput(input, 0);
             String oldCampaignName = foundCampaign.getCampaignName();
             foundCampaign.setSalePercent(newSaleValue);
-            PercentCampaign.updatedCampaignToFile(currentPath,foundCampaign,oldCampaignName);
+            PercentCampaign.updatedCampaignToFile(currentPath, foundCampaign, oldCampaignName);
             //om man nu ska köra enl. strategy-pattern så kanske det är rimligare att anropa ProductCampaign.updatedCampaignToFile???????
             //just nu kan denna metod bara hantera %kampanjer
         }
     }
-    private static void removeCampaign(){
+
+    private static void removeCampaign() {
         ProductCampaign foundCampaign = getProductCampaign("ange vilken Kampanj du vill ta bort");
         allCampaigns.remove(foundCampaign);
         PercentCampaign.removeCampaignFile(currentPath, foundCampaign.getCampaignName());
     }
+
     private static void setCampaignOnProduct() {
         System.out.println("ange produktID (PLU) på produkten:");
         int userInput = getValidIntegerInput(input, 1, Integer.MAX_VALUE);
         Product foundProduct = searchByProductId(userInput);
         if (foundProduct == null) {
             return;
-        }else{
+        } else {
             System.out.println(foundProduct);
         }
-
 
         System.out.println("Om produkten redan har en kampanj kommer den kampanjen du väljer här ersätta den.");
         ProductCampaign foundCampaign = getProductCampaign("vilken kampanj vill du ha på produkten?");
         foundProduct.setProductCampaign(foundCampaign);
         System.out.println("Ange hur många enheter (kg/styck) kund måste köpa för att rabatten ska gälla:");
         foundProduct.setcampaignCondition(getValidIntegerInput(input, 1, Integer.MAX_VALUE));
-        PercentCampaign.saveCampaignOnProductToFile(currentPath,foundProduct, foundCampaign);
+        PercentCampaign.saveCampaignOnProductToFile(currentPath, foundProduct, foundCampaign);
 
     }
-    private static void editCampaignOnProduct(){
+
+    private static void editCampaignOnProduct() {
 
         //KampanjNAMN,VILLKOR,PRODUKTID
 
@@ -965,10 +974,9 @@ public class Main {
 
         System.out.println("Ange hur många enheter (kg/styck) kund måste köpa för att rabatten ska gälla:");
         foundProduct.setcampaignCondition(getValidIntegerInput(input, 1, Integer.MAX_VALUE));
-        PercentCampaign.editCampaignOnProductFile(currentPath, foundProduct,foundProduct.getProductCampaign());
+        PercentCampaign.editCampaignOnProductFile(currentPath, foundProduct, foundProduct.getProductCampaign());
 
     }
-
 
     private static void removeCampaignOnProduct() {
         printCampaigns();
@@ -979,7 +987,8 @@ public class Main {
         if (foundProduct == null) {
             return;
         }
-        for (ArrayList<> productGroup : allCampaigns) {
+
+        for (ArrayList<Product> productGroup : allProducts) {
             for (int i = 0; i < productGroup.size(); i++) {
                 if (productGroup.contains(foundProduct)) {
                     productGroup.remove(foundProduct);
@@ -987,7 +996,10 @@ public class Main {
             }
         }
 
-        PercentCampaign.removeCampaignOnProductFromFile( currentPath, foundProduct);
+        Product replaceProduct = new Product(foundProduct.getProductId(), foundProduct.getName(), foundProduct.getProductGroup(), foundProduct.getPrice(), foundProduct.isUnitPriceByWeight());
+        assignProductToCorrectProductGroupArrayList(foundProduct.getProductGroup(), replaceProduct);
+
+        PercentCampaign.removeCampaignOnProductFromFile(currentPath, foundProduct);
     }
 
 

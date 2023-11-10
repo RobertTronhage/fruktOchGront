@@ -1,3 +1,4 @@
+//Robert Tronhage, robert.tronhage@iths.se
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -158,7 +159,6 @@ public class PercentCampaign implements ProductCampaign {
                 String[] splitProductLine = productLine.split(":");
                 int productIdFromFile = Integer.parseInt(splitProductLine[2]);
 
-                // Om det inte är raden du vill ta bort, skriv den till den temporära filen
                 if (foundProduct.getProductId() != productIdFromFile) {
                     writer.write(productLine + "\n");
                 }

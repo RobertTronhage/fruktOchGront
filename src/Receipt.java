@@ -1,10 +1,9 @@
+//Robert Tronhage, robert.tronhage@iths.se
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-
 
 public class Receipt {
 
@@ -17,7 +16,7 @@ public class Receipt {
                                 "\n\n\n========================\nTot Antal (Styck): "+
                                 cart.getProductTotAmountInPcs() +
                                 "\nTot Antal (kg): " + cart.getProductTotAmountInKg()+ "\nTotalt pris: " +
-                                String.format("%.2f", cart.getTotalPrice()) + " SEK\n";
+                                String.format("%.2f", cart.getTotalPrice());
 
         // Visa kvitto på konsolen
         System.out.println(receiptContent);
@@ -31,7 +30,7 @@ public class Receipt {
 
         for (int i = 0; i < cart.getProductAmounts().size(); i++) {
             productAmount += cart.getProductAmounts().get(i)+"\t\t\t" + cart.getAllProductsInCart().get(i).getName()+
-                    "\t\t\t"+ cart.getAllProductsInCart().get(i).getPrice()*cart.getProductAmounts().get(i)+"\n";
+                    "\t\t\t"+ cart.getAllProductsInCart().get(i).getPrice()*cart.getProductAmounts().get(i) + " SEK\n";
         }
         return productAmount;
     }
