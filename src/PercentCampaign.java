@@ -85,7 +85,7 @@ public class PercentCampaign implements ProductCampaign {
             FileWriter fileWriter = new FileWriter(fileName, true);
             fileWriter.write(productLine);
             fileWriter.close();
-            System.out.println("Kampanjdokument har skapats, du hittar det i mappen 'Produkter' i roten på projektet...");
+            System.out.println("Kampanjdokument har skapats, du hittar det i mappen 'Kampanj_Produkter' i roten på projektet...");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("he gick inte!");
@@ -129,7 +129,7 @@ public class PercentCampaign implements ProductCampaign {
 
             if (file.delete()) {
             } else {
-                System.out.println("HE GÅR IT!!!!!");
+                System.out.println("Det gick inte att ta bort filen!");
             }
 
             if (isUpdated) {
@@ -171,12 +171,11 @@ public class PercentCampaign implements ProductCampaign {
             if (file.delete()) {
 
                 if (tempFile.renameTo(file)) {
-                    System.out.println("Kampanjprodukten borttagen!");
                 } else {
-                    System.out.println("Det gick inte att byta namn på den temporära filen.");
+                    System.out.println("Det gick inte att uppdatera filen.");
                 }
             } else {
-                System.out.println("Det gick inte att ta bort den ursprungliga filen.");
+                System.out.println("Det gick inte att uppdatera filen!");
             }
 
         } catch (IOException e) {

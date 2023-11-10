@@ -131,7 +131,7 @@ public class Product {
             FileWriter fileWriter = new FileWriter(fileName,true);
             fileWriter.write(productLine);
             fileWriter.close();
-            System.out.println("SY GÖTT!");
+
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("he gick inte!");
@@ -169,9 +169,9 @@ public class Product {
 
             if (isUpdated) {
                 if (tempFile.renameTo(file)) {
-                    System.out.println("ASKDJNASDKJNASKDJNASKJDNASD");
+                    System.out.println("Filen är uppdaterad!");
                 } else {
-                    System.out.println("Det gick inte att döpa om filen...");
+                    System.out.println("Det gick inte att uppdatera filen...");
                 }
             }
 

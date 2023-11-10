@@ -221,7 +221,7 @@ public class Main {
             System.out.println("Ange nytt lösenord (notera att du inte kan använda tecknet ':'): ");
             String newUserPassword = getValidStringInput(input);
             foundUser.setPassword(newUserPassword);
-            foundUser.updateUserToFile();
+            foundUser.updateUserToFile(currentPath);
         } else if (userChoice == 2) {
             System.out.println("Avbryter.. Lösenordet ändras INTE");
         }
@@ -280,7 +280,7 @@ public class Main {
 
         if (userChoice == 1) {
             foundUser.setUserAdmin(true);
-            foundUser.updateUserToFile();
+            foundUser.updateUserToFile(currentPath);
         } else if (userChoice == 2) {
             foundUser.setUserAdmin(false);
         }
@@ -308,7 +308,7 @@ public class Main {
         } else if (userChoice == 2) {
             foundUser.setUserActive(false);
         }
-        foundUser.updateUserToFile();
+        foundUser.updateUserToFile(currentPath);
 
         System.out.println("användaren: " + foundUser.getUserName() + (foundUser.isUserActive() ? " har Aktiverats..." : " har inaktiverats..."));
 //
@@ -344,7 +344,7 @@ public class Main {
         User newUser = new User(userPassword, userName, isAdmin);
         System.out.println("Användare: " + userName + " har skapats");
         System.out.println(newUser);
-        newUser.addNewUserToFile();
+        newUser.addNewUserToFile(currentPath);
 
     }
 
@@ -403,7 +403,7 @@ public class Main {
 
         do {
             userInput = input.nextLine();
-            if (!userInput.matches("[a-zA-ZåäöÅÄÖ0-9]")) {
+            if (!userInput.matches("[a-zA-ZåäöÅÄÖ0-9]+")) {
                 System.out.println("Felaktig inmatning, du kan inte använda specialtecken!");
                 isUserInputInvalid = true;
             } else if (userInput.isEmpty()) {

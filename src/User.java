@@ -85,11 +85,11 @@ public class User {
         return userIdCounter;
     }
 
-    public void addNewUserToFile() {
+    public void addNewUserToFile(String currentPath) {
         try {
             String userLine;
 
-            FileWriter fileWriter = new FileWriter("users.txt", true);
+            FileWriter fileWriter = new FileWriter(currentPath +"\\users.txt", true);
 
             userLine = userId + ":" + userName + ":" + password + ":" + (isUserActive ? "1" : "0") + ":" + (isUserAdmin ? "1" : "0");
             fileWriter.write(userLine + "\n");
@@ -100,12 +100,12 @@ public class User {
         }
     }
 
-    public void updateUserToFile() {
+    public void updateUserToFile(String currentPath) {
         try {
-            File file = new File("users.txt");
-            File tempFile = new File("temp_users.txt");
+            File file = new File(currentPath +"\\users.txt");
+            File tempFile = new File(currentPath +"\\temp_users.txt");
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            BufferedWriter writer = new BufferedWriter(new FileWriter("temp_users.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(currentPath +"\\temp_users.txt"));
 
             String userLine;
             boolean isUpdated = false;
@@ -131,7 +131,7 @@ public class User {
             }
 
             if (isUpdated) {
-                if (new File("temp_users.txt").renameTo(file)) {
+                if (new File(currentPath +"\\temp_users.txt").renameTo(file)) {
                 } else {
                     System.out.println("Det gick inte att byta namn på filen.");
                 }
