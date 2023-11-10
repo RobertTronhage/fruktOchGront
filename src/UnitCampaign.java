@@ -25,8 +25,8 @@ public class UnitCampaign implements ProductCampaign{
     }
 
     @Override
-    public String setCampaignName() {
-        return null;
+    public void setCampaignName(String campaignName) {
+        this.campaignName = campaignName;
     }
 
     @Override

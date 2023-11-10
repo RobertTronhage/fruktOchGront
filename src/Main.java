@@ -31,27 +31,21 @@ public class Main {
 
     public static void main(String[] args) {
 
-        try {
-            currentPath = new File(".").getCanonicalPath();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
         initFromFile();
         mainMenu();
         System.out.println("Tack för att du använder supervåg 3000,\n hejdååå! :)");
     }
 
     private static void initFromFile() {
-        PercentCampaign.initCampaigns();
-        Product.initProducts();
-
+        initCurrentPath();
+        Product.initProducts(currentPath);
+        PercentCampaign.initCampaigns(currentPath);
         allProducts.add(allFruits);
         allProducts.add(allVegetables);
         allProducts.add(allRootVegetables);
         allProducts.add(allMushrooms);
         allProducts.add(allUnassignedProductGroup);
-        PercentCampaign.initCampaignOnProducts();
+        PercentCampaign.initCampaignOnProducts(currentPath);
     }
 
     private static void mainMenu() {
@@ -78,6 +72,21 @@ public class Main {
                 case 5 -> verifyUserCredentials();
             }
         } while (menuOption != 6);
+    }
+
+    public static void initCurrentPath(){
+        Console console = System.console();
+        try {
+            currentPath = new File(".").getCanonicalPath();
+
+            if (console!=null) {
+                currentPath = currentPath.substring(0,currentPath.length()-4);
+
+            }
+
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void verifyUserCredentials() {
@@ -389,6 +398,8 @@ public class Main {
         String userInput;
         boolean isUserInputInvalid;
 
+        //TODO vänd på if statement så du tar A-Z som gött!
+
         do {
                 userInput = input.nextLine();
                 if (userInput.contains(":")) {
@@ -529,6 +540,7 @@ public class Main {
 
     public static Product searchByProductId(int productId) {
 
+
         Product foundProduct = null;
 
         while (true) {
@@ -544,6 +556,7 @@ public class Main {
                     return foundProduct;
                 }
             }
+
             System.out.println("Ingen produkt med det ID\n");
             return null;
         }
@@ -815,23 +828,23 @@ public class Main {
         System.out.println("Vad vill du göra?\n" +
                 "1 - Skapa en ny kampanj\n" +
                 "2 - Visa alla Aktiva kampanjer\n"+
-                "2 - Ändra kampanj\n" +
-                "3 - Ändra en kampanj på produkt\n" +
-                "4 - Lägga till kampanj på produkt\n" +
-                "5 - Ta bort kampanj från produkt\n" +
-                "6 - Ta bort en kampanj\n" +
-                "7 - Åter till personalmeny");
+                "3 - Ändra kampanj\n" +
+                "4 - Ändra en kampanj på produkt\n" +
+                "5 - Lägga till kampanj på produkt\n" +
+                "6 - Ta bort kampanj från produkt\n" +
+                "7 - Ta bort en kampanj\n" +
+                "8 - Åter till personalmeny");
 
-        userinput = getValidIntegerInput(input, 1, 7);
+        userinput = getValidIntegerInput(input, 1, 8);
 
         switch (userinput) {
             case 1 -> createNewCampaign();
             case 2 -> printCampaigns();
-            //case 3 -> editCampaign();
+            case 3 -> editCampaign();
             case 4 -> editCampaignOnProduct();
             case 5 -> setCampaignOnProduct();
             //case 6 -> removeCampaignOnProduct();
-            //case 7 -> removeCampaign();
+            case 7 -> removeCampaign();
         }
     }
 
@@ -865,7 +878,7 @@ public class Main {
         double campaignInPercent = getValidDoubleInput(input, 0);
         ProductCampaign percentCampaign = new PercentCampaign(campaignInPercent, nameOfCampaign);
         allCampaigns.add(percentCampaign);
-        PercentCampaign.saveCampaignToFile(campaignInPercent, nameOfCampaign);
+        PercentCampaign.saveCampaignToFile(currentPath, campaignInPercent, nameOfCampaign);
     }
     private static ProductCampaign getProductCampaign(String reasonForSearch) {
         System.out.println(reasonForSearch);
@@ -888,27 +901,31 @@ public class Main {
                 "1 - Namn på kampanjen\n" +
                 "2 - hur mycket rabatt kampanjen ska ha\n" +
                 "3 - Avbryt och åter ");
+
         int userInput = getValidIntegerInput(input, 1, 3);
 
         if (userInput == 1) {
             System.out.println("ange det nya namnet på kampanjen:");
             newCampaignName = getValidStringInput(input);
             String oldCampaignName = foundCampaign.getCampaignName();
-            foundCampaign.setCampaignName();
-            PercentCampaign.updatedCampaignToFile();
-
+            foundCampaign.setCampaignName(newCampaignName);
+            PercentCampaign.updatedCampaignToFile(currentPath, foundCampaign,oldCampaignName);
+            //om man nu ska köra enl. strategy-pattern så kanske det är rimligare att anropa ProductCampaign.updatedCampaignToFile???????
+            //just nu kan denna metod bara hantera %kampanjer
 
         } else if (userInput == 2) {
             double oldSaleValue = foundCampaign.getSalePercent();
             foundCampaign.setSalePercent(newSaleValue);
-            PercentCampaign.updatedCampaignToFile();
+            //PercentCampaign.updatedCampaignToFile();
+            //om man nu ska köra enl. strategy-pattern så kanske det är rimligare att anropa ProductCampaign.updatedCampaignToFile???????
+            //just nu kan denna metod bara hantera %kampanjer
         }
     }
 
     private static void removeCampaign(){
         ProductCampaign foundCampaign = getProductCampaign("ange vilken Kampanj du vill ta bort");
         allCampaigns.remove(foundCampaign);
-        //PercentCampaign.removeCampaignFile();
+        PercentCampaign.removeCampaignFile(currentPath, foundCampaign.getCampaignName());
     }
 
     private static void setCampaignOnProduct() {
@@ -927,7 +944,7 @@ public class Main {
         foundProduct.setProductCampaign(foundCampaign);
         System.out.println("Ange hur många enheter (kg/styck) kund måste köpa för att rabatten ska gälla:");
         foundProduct.setcampaignCondition(getValidIntegerInput(input, 1, Integer.MAX_VALUE));
-        PercentCampaign.saveCampaignOnProductToFile(foundProduct, foundCampaign);
+        PercentCampaign.saveCampaignOnProductToFile(currentPath,foundProduct, foundCampaign);
 
     }
     private static void editCampaignOnProduct(){

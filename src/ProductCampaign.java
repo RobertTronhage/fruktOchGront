@@ -3,7 +3,7 @@ public interface ProductCampaign {
     double getSalePercent();
     String getCampaignName();
 
-    String setCampaignName();
+    void setCampaignName(String campaignName);
 
     void setSalePercent(double newSaleValue);
 }

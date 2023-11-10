@@ -1,6 +1,4 @@
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 //Robert Tronhage, robert.tronhage@iths.se
@@ -147,7 +145,6 @@ public class Product {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             BufferedWriter writer = new BufferedWriter(new FileWriter("Produkter/temp_produkter.txt"));
 
-
             String productLine;
             boolean isUpdated = false;
 
@@ -183,15 +180,15 @@ public class Product {
         }
     }
 
-    public static void initProducts() {
-        File productDirectory = new File("Produkter");
+    public static void initProducts(String currentPath) {
+
+        File productDirectory = new File(currentPath+"\\Produkter");
 
         if (!productDirectory.exists() || !productDirectory.isDirectory()) {
             System.out.println("hittar it Produktmappen!");
             return;
         }
-        File fin = new File("Produkter/Produkter.txt");
-
+        File fin = new File(currentPath+"/Produkter/Produkter.txt");
 
         try (Scanner fileScan = new Scanner(fin)) {
             while (fileScan.hasNextLine()) {

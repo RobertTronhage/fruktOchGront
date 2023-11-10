@@ -23,8 +23,8 @@ public class PercentCampaign implements ProductCampaign {
     }
 
     @Override
-    public String setCampaignName() {
-        return campaignName;
+    public void setCampaignName(String campaignName) {
+        this.campaignName = campaignName;
     }
 
     public void setSalePercent(double salePercent) {
@@ -40,16 +40,8 @@ public class PercentCampaign implements ProductCampaign {
     }
 
 
-    public void generateCampaign() {
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String campaignContent = "";
-
-
-    }
-
-    public static void saveCampaignToFile(double salePercent, String campaignName) {
-        File directory = new File("Kampanjer");
+    public static void saveCampaignToFile(String currentPath,double salePercent, String campaignName) {
+        File directory = new File(currentPath + "\\Kampanjer");
         if (!directory.exists()) {
             if (directory.mkdirs()) {
                 System.out.println("Mappen 'Kampanjer' har skapats.");
@@ -59,8 +51,9 @@ public class PercentCampaign implements ProductCampaign {
         }
         try {
 
-            String fileName = "Kampanjer/Kampanj_" + campaignName + ".txt";
-            FileWriter fileWriter = new FileWriter(fileName);
+            String fileName = currentPath + "\\Kampanjer\\Kampanj_" + campaignName + ".txt";
+            File newFile = new File(fileName);
+            FileWriter fileWriter = new FileWriter(newFile);
             fileWriter.write(salePercent + ":" + campaignName);
             fileWriter.close();
             System.out.println("Kampanjdokument har skapats, du hittar det i mappen 'Kampanjer' i roten på projektet...");
@@ -69,51 +62,15 @@ public class PercentCampaign implements ProductCampaign {
             System.out.println("he gick inte!");
         }
     }
-    public static void updatedCampaignToFile() {
-//        try {
-//            File file = new File();
-//            File tempFile = new File("temp_users.txt");
-//            BufferedReader reader = new BufferedReader(new FileReader(file));
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("temp_users.txt"));
-//
-//
-//            String userLine;
-//            boolean isUpdated = false;
-//
-//            while ((userLine = reader.readLine()) != null) {
-//                String[] splitUserString = userLine.split(":");
-//                int userId = Integer.parseInt(splitUserString[0]);
-//
-//                if (getUserId() == userId) {
-//                    userLine = getUserId() + ":" + userName + ":" + password + ":" +
-//                            (isUserActive ? "1" : "0") + ":" + (isUserAdmin ? "1" : "0");
-//                    isUpdated = true;
-//                }
-//                writer.write(userLine + "\n");
-//            }
-//
-//            reader.close();
-//            writer.close();
-//
-//            if (file.delete()) {
-//            } else {
-//                System.out.println("HE GÅR IT!!!!!");
-//            }
-//
-//            if (isUpdated) {
-//                if (new File("temp_users.txt").renameTo(file)) {
-//                } else {
-//                    System.out.println("FEEEEEEEEEL.");
-//                }
-//            }
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-        }
+
+    public static void updatedCampaignToFile(String currentPath,ProductCampaign productCampaign,String oldCampaignName) {
+        saveCampaignToFile(currentPath, productCampaign.getSalePercent(), productCampaign.getCampaignName());
+        removeCampaignFile(currentPath, oldCampaignName);
+    }
 
 
-    public static void saveCampaignOnProductToFile(Product foundProduct,ProductCampaign foundCampaign) {
-        File directory = new File("Kampanj_Produkter");
+    public static void saveCampaignOnProductToFile(String currentPath, Product foundProduct, ProductCampaign foundCampaign) {
+        File directory = new File(currentPath +"\\Kampanj_Produkter");
         if (!directory.exists()) {
             if (directory.mkdirs()) {
                 System.out.println("Mappen 'Kampanj_Produkter' har skapats.");
@@ -122,9 +79,9 @@ public class PercentCampaign implements ProductCampaign {
             }
         }
         try {
-            String productLine =foundCampaign.getCampaignName()+":"+
-                    foundProduct.getCampaignCondition() +":"+foundProduct.getProductId()+ "\n";
-            String fileName = "Kampanj_Produkter/Kampanj_Produkter.txt";
+            String productLine = foundCampaign.getCampaignName() + ":" +
+                    foundProduct.getCampaignCondition() + ":" + foundProduct.getProductId() + "\n";
+            String fileName = currentPath+"/Kampanj_Produkter/Kampanj_Produkter.txt";
             FileWriter fileWriter = new FileWriter(fileName, true);
             fileWriter.write(productLine);
             fileWriter.close();
@@ -134,7 +91,16 @@ public class PercentCampaign implements ProductCampaign {
             System.out.println("he gick inte!");
         }
     }
-//    public static void removeCampaignOnProductFile(){
+
+    public static void removeCampaignFile(String currentPath, String campaignName){
+        File file = new File(currentPath+"\\Kampanjer\\Kampanj_" + campaignName + ".txt");
+
+        if (file.delete()) {
+        } else {
+            System.out.println("HE GÅR IT ATT TA BORT FILHELVETET!");
+        }
+    }
+    public static void removeCampaignOnProductFile(){
 //        File directory = new File("Kampanj_Produkter");
 //        if (!directory.exists()) {
 //            if (directory.mkdirs()) {
@@ -155,16 +121,17 @@ public class PercentCampaign implements ProductCampaign {
 //            e.printStackTrace();
 //            System.out.println("he gick inte!");
 //        }
-//    }
+    }
 
-    public static void initCampaignOnProducts() {
-        File productCampaignDirectory = new File("Kampanj_Produkter");
+    public static void initCampaignOnProducts(String currentPath) {
+
+        File productCampaignDirectory = new File(currentPath + "\\Kampanj_Produkter");
 
         if (!productCampaignDirectory.exists() || !productCampaignDirectory.isDirectory()) {
-            System.out.println("hittar it kampanjmappen!");
+            System.out.println("hittar it Produkt_kampanjmappen!");
             return;
         }
-        File fin = new File("Kampanj_Produkter/Kampanj_Produkter.txt");
+        File fin = new File(currentPath + "/Kampanj_Produkter/Kampanj_Produkter.txt");
 
         try (Scanner fileScan = new Scanner(fin)) {
             while (fileScan.hasNextLine()) {
@@ -176,8 +143,10 @@ public class PercentCampaign implements ProductCampaign {
                 Product product = Main.searchByProductId(productId);
 
                 for (int i = 0; i < Main.allCampaigns.size(); i++) {
-                    if (Main.allCampaigns.get(i).getCampaignName().equals(campaignName)){
-                        assert product != null;
+                    if (Main.allCampaigns.get(i).getCampaignName().equals(campaignName)) {
+                        if (product==null){
+                            return;
+                        }
                         product.setProductCampaign(Main.allCampaigns.get(i));
                         product.setcampaignCondition(condition);
                     }
@@ -191,8 +160,8 @@ public class PercentCampaign implements ProductCampaign {
 
     }
 
-    public static void initCampaigns() {
-        File campaignDirectory = new File("Kampanjer");
+    public static void initCampaigns(String currentPath) {
+        File campaignDirectory = new File(currentPath+"/Kampanjer");
 
         if (!campaignDirectory.exists() || !campaignDirectory.isDirectory()) {
             System.out.println("hittar it kampanjmappen!");

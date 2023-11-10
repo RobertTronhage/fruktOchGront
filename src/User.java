@@ -107,7 +107,6 @@ public class User {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             BufferedWriter writer = new BufferedWriter(new FileWriter("temp_users.txt"));
 
-
             String userLine;
             boolean isUpdated = false;
 
