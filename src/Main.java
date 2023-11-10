@@ -885,6 +885,10 @@ public class Main {
         }
         System.out.println("Hur många % rabatt vill du lägga till?");
         double campaignInPercent = getValidDoubleInput(input, 0);
+        if (campaignInPercent>100){
+            System.out.println("du kan inte ange mer än 100%, ange rabatt:");
+            campaignInPercent = getValidDoubleInput(input,0);
+        }
         ProductCampaign percentCampaign = new PercentCampaign(campaignInPercent, nameOfCampaign);
         allCampaigns.add(percentCampaign);
         PercentCampaign.saveCampaignToFile(currentPath, campaignInPercent, nameOfCampaign);
@@ -920,17 +924,19 @@ public class Main {
             String oldCampaignName = foundCampaign.getCampaignName();
             foundCampaign.setCampaignName(newCampaignName);
             PercentCampaign.updatedCampaignToFile(currentPath, foundCampaign, oldCampaignName);
-            //om man nu ska köra enl. strategy-pattern så kanske det är rimligare att anropa ProductCampaign.updatedCampaignToFile???????
-            //just nu kan denna metod bara hantera %kampanjer
+
 
         } else if (userInput == 2) {
             System.out.println("Ange hur mycket rabatt kampanjen ska ha i % :");
             newSaleValue = getValidDoubleInput(input, 0);
+            if (newSaleValue>100){
+                System.out.println("du kan inte ange mer än 100%, ange rabatt:");
+                newSaleValue = getValidDoubleInput(input,0);
+            }
             String oldCampaignName = foundCampaign.getCampaignName();
             foundCampaign.setSalePercent(newSaleValue);
             PercentCampaign.updatedCampaignToFile(currentPath, foundCampaign, oldCampaignName);
-            //om man nu ska köra enl. strategy-pattern så kanske det är rimligare att anropa ProductCampaign.updatedCampaignToFile???????
-            //just nu kan denna metod bara hantera %kampanjer
+
         }
     }
 
